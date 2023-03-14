@@ -12,7 +12,7 @@ import datetime as dt
 yf.pdr_override()
 
 
-class CompanyDataScraper:
+class DataScraper:
     """
     This class is used to scrape financial data from Financial Modeling Prep API and Yahoo Finance.
 
@@ -20,6 +20,7 @@ class CompanyDataScraper:
         ticker (str): The ticker symbol for the stock to scrape data for.
         api_key (str, optional): The API key to access Financial Modeling Prep API. Defaults to "".
         period (str, optional): The period to retrieve data for. Can be 'annual' or 'quarter'. Defaults to 'quarter'.
+        data_type (str, optional): The type of data to retrieve. Can be 'company' or 'economic'. Defaults to 'company'.
 
     Attributes:
         ticker (str): The ticker symbol for the stock being scraped.
@@ -32,13 +33,22 @@ class CompanyDataScraper:
         AssertionError: Raised if ticker, period, or api_key are not valid.
 
     """
-    def __init__(self, ticker: str, api_key: str = "", period: str = "quarter"):
+
+    def __init__(
+        self,
+        ticker: str,
+        api_key: str = "",
+        period: str = "quarter",
+        data_type: str = "company",
+    ):
         self.ticker = ticker.upper()
         self.period = period.lower().strip()
         self.api_key = str(api_key)
-        self.fmp_api_requests = ["info", "ratios", "metrics", "is"]
+        self.data_type = data_type
         self.assert_valid_user_inputs()
-        self.data_dictionary = self.fetch_all_data()
+        self.fmp_company_requests = ["info", "ratios", "metrics", "is"]
+        self.fmp_economic_requests = ["realGDPPerCapita", "CPI", "consumerSentiment"]
+        self.data_dictionary = self.fetch_data()
 
     def assert_valid_user_inputs(self):
         """
@@ -48,9 +58,17 @@ class CompanyDataScraper:
             AssertionError: Raised if ticker, period, or api_key are not valid.
 
         """
+        self.ticker = "^GSPC" if self.ticker == "S&P500" else self.ticker
         assert self.ticker.isupper()
         assert self.period.islower()
-        assert self.period in ["annual", "quarter"]
+        assert self.period in [
+            "annual",
+            "quarter",
+        ], "period must be 'annual' or 'quarter'"
+        assert self.data_type in [
+            "company",
+            "economic",
+        ], "data_type must be 'company' or 'economic'"
         assert self.api_key
 
     def get_fmp_api_url(self, data_type: str = "") -> str:
@@ -67,7 +85,7 @@ class CompanyDataScraper:
             AssertionError: Raised if the specified data_type is not valid.
 
         """
-        assert data_type in self.fmp_api_requests, f"<{data_type}> invalid"
+        end_date = str(dt.date.today())
         if data_type == "ratios":
             template = (
                 "https://financialmodelingprep.com/api/"
@@ -79,7 +97,6 @@ class CompanyDataScraper:
                 "https://financialmodelingprep.com/api/v3/"
                 "key-metrics/{}?period={}&limit=400&apikey={}"
             )
-
             return template.format(self.ticker, self.period, self.api_key)
         if data_type == "info":
             template = (
@@ -92,6 +109,18 @@ class CompanyDataScraper:
                 "income-statement/{}?period={}&limit=400&apikey={}"
             )
             return template.format(self.ticker, self.period, self.api_key)
+        if data_type == "TYield":
+            template = (
+                "https://financialmodelingprep.com/api/v4/"
+                "treasury?from=2010-06-30&to={}&apikey={}"
+            )
+            return template.format(end_date, self.api_key)
+        if data_type in ["CPI", "realGDPPerCapita", "consumerSentiment"]:
+            template = (
+                "https://financialmodelingprep.com/api/v4/"
+                "economic?name={}&from=1970-06-30&to={}&apikey={}"
+            )
+            return template.format(data_type, end_date, self.api_key)
 
     @staticmethod
     def make_fmp_api_requests(url: str) -> Response:
@@ -147,7 +176,7 @@ class CompanyDataScraper:
         assert len(stock_data) > 85, "Insufficient stock price data"
         return stock_data
 
-    def fetch_all_data(self) -> Dict[str, Dict]:
+    def fetch_data(self) -> Dict[str, Dict]:
         """
         Fetches all financial data from Financial Modeling Prep API and Yahoo Finance.
 
@@ -159,37 +188,17 @@ class CompanyDataScraper:
 
         """
         data_dictionary = {}
-        for string in self.fmp_api_requests:
-            url = self.get_fmp_api_url(string)
-            response = self.make_fmp_api_requests(url)
-            data = self.convert_raw_data_to_json(response)
-            data_dictionary[string] = data
+        request_list = (
+            self.fmp_company_requests
+            if self.data_type == "company"
+            else self.fmp_economic_requests
+        )
+        if not self.ticker == '^GSPC':
+            for string in request_list:
+                url = self.get_fmp_api_url(string)
+                response = self.make_fmp_api_requests(url)
+                data = self.convert_raw_data_to_json(response)
+                data_dictionary[string] = data
         stock_price_data = self.fetch_stock_price_data()
         data_dictionary["price"] = [stock_price_data]
         return data_dictionary
-
-
-class EconomicDataScraper:
-
-    '''Change to inherit from CompanyDataScraper and just redefine the
-    appropriate methods?'''
-
-    def __init__(self, api_key: str) -> None:
-        self.api_key = api_key
-
-    def get_fmp_api_url(self, data_type: str) -> str:
-        end = str(dt.date.today())
-        if data_type == 'TYield':
-            template = "https://financialmodelingprep.com/api/v4/"\
-                          "treasury?from=1970-06-30&to={}&apikey={}"
-            return template.format(end, self.api_key)
-        if data_type in ['CPI', 'realGDP', 'consumerSentiment']:
-            template = "https://financialmodelingprep.com/api/v4/"\
-                         "economic?name={}&from=1970-06-30&to={}&apikey={}"
-            return template.format(data_type, end, self.api_key)
-        
-    def fetch_snp500_historical_prices(self) -> pd.DataFrame:
-        start = dt.date(1970, 1, 1)
-        df = pdr.get_data_yahoo('^GSPC', start=start, interval='1d')
-        assert len(df) > 85, "Insufficient stock price data"
-        return df
