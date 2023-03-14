@@ -12,7 +12,7 @@ import datetime as dt
 yf.pdr_override()
 
 
-class DataScraper:
+class CompanyDataScraper:
     """
     This class is used to scrape financial data from Financial Modeling Prep API and Yahoo Finance.
 
@@ -167,3 +167,29 @@ class DataScraper:
         stock_price_data = self.fetch_stock_price_data()
         data_dictionary["price"] = [stock_price_data]
         return data_dictionary
+
+
+class EconomicDataScraper:
+
+    '''Change to inherit from CompanyDataScraper and just redefine the
+    appropriate methods?'''
+
+    def __init__(self, api_key: str) -> None:
+        self.api_key = api_key
+
+    def get_fmp_api_url(self, data_type: str) -> str:
+        end = str(dt.date.today())
+        if data_type == 'TYield':
+            template = "https://financialmodelingprep.com/api/v4/"\
+                          "treasury?from=1970-06-30&to={}&apikey={}"
+            return template.format(end, self.api_key)
+        if data_type in ['CPI', 'realGDP', 'consumerSentiment']:
+            template = "https://financialmodelingprep.com/api/v4/"\
+                         "economic?name={}&from=1970-06-30&to={}&apikey={}"
+            return template.format(data_type, end, self.api_key)
+        
+    def fetch_snp500_historical_prices(self) -> pd.DataFrame:
+        start = dt.date(1970, 1, 1)
+        df = pdr.get_data_yahoo('^GSPC', start=start, interval='1d')
+        assert len(df) > 85, "Insufficient stock price data"
+        return df

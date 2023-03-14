@@ -1,1 +1,1 @@
-from .data_scraper import DataScraper
+from .data_scraper import CompanyDataScraper

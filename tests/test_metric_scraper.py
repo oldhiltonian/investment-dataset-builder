@@ -1,5 +1,5 @@
 import sys
-from investment_predictions import DataScraper
+from investment_predictions import CompanyDataScraper
 import unittest
 from unittest.mock import Mock, patch
 import itertools
@@ -16,7 +16,7 @@ with open(key_path) as file:
     api_key = file.read()
 
 
-def instance_generator():
+def company_data_instance_generator():
     """
     Generator function that yields instances of the DataScraper class for various tickers and periods.
 
@@ -27,10 +27,10 @@ def instance_generator():
     tickers = ["AAPL", "NVDA", "MSFT", "JXN"]
     periods = ["annual", "quarter"]
     for ticker, period in itertools.product(tickers, periods):
-        yield DataScraper(ticker, api_key, period)
+        yield CompanyDataScraper(ticker, api_key, period)
 
 
-class TestMetricScraper(unittest.TestCase):
+class CompanyDataScraper(unittest.TestCase):
     """
     A unittest test case for the DataScraper class.
 
@@ -44,7 +44,7 @@ class TestMetricScraper(unittest.TestCase):
             AssertionError: Raised if the ticker is not uppercase, if the period is not lowercase and not equal to 'annual' or 'quarter',
             or if the api_key is empty.
         """
-        for instance in instance_generator():
+        for instance in company_data_instance_generator():
             instance.assert_valid_user_inputs()
             for i in range(10):
                 if i%2 == 0:
@@ -64,7 +64,7 @@ class TestMetricScraper(unittest.TestCase):
             AssertionError: Raised if the result of get_fmp_api_url does not match the expected URL.
 
         """
-        for instance in instance_generator():
+        for instance in company_data_instance_generator():
             ticker = instance.ticker
             period = instance.period
             for string in instance.fmp_api_requests:
@@ -105,7 +105,7 @@ class TestMetricScraper(unittest.TestCase):
             AssertionError: Raised if the response status code is not 200.
 
         """
-        for instance in instance_generator():
+        for instance in company_data_instance_generator():
             mock_response = Mock(spec=requests.models.Response)
             mock_response.status_code = 200
             mock_response.content = b'{"result": "success"}'
@@ -123,7 +123,7 @@ class TestMetricScraper(unittest.TestCase):
             AssertionError: Raised if the result of convert_raw_data_to_json does not match the expected result.
 
         """
-        for instance in instance_generator():
+        for instance in company_data_instance_generator():
             mock_response = Mock(spec=requests.models.Response)
             mock_response.content = b'{"result": "success"}'
             mock_response.json.return_value = {"result": "success"}
@@ -140,7 +140,7 @@ class TestMetricScraper(unittest.TestCase):
             or if the returned object is not a pandas DataFrame.
 
         """
-        for instance in instance_generator():
+        for instance in company_data_instance_generator():
             data = instance.fetch_stock_price_data()
             self.assertGreater(len(data), 85)
             cols = data.columns
@@ -160,9 +160,19 @@ class TestMetricScraper(unittest.TestCase):
             if the value of a key in the returned dictionary is not a list.
 
         """
-        for instance in instance_generator():
+        for instance in company_data_instance_generator():
             data = instance.data_dictionary
             self.assertEqual(len(data), 5)
             for key in data.keys():
                 self.assertIsInstance(key, str)
                 self.assertIsInstance(data[key], list)
+
+
+
+class TestEconomicDataScraper(unittest.TestCase):
+    
+    def test_get_fmp_api_url(self):
+        pass
+
+    def test_fetch_snp500_historical_prices(self):
+        pass
