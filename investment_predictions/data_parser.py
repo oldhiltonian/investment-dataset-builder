@@ -45,6 +45,15 @@ class DataParser:
         json_data = self.data_dictionary['ratios']
         df_data = self.json_to_dataframe(json_data)
         return df_data[cols]
+    
+    def parse_metrics(self) -> pd.DataFrame:
+        pass
+
+    def parse_income_statement(self) -> pd.DataFrame:
+        pass
+
+    def parse_price(self) -> pd.DataFrame:
+        return self.data_dictionary['price'][0]
 
     
     

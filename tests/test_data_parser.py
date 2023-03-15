@@ -82,5 +82,11 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(len(result_df), len(instance.data_dictionary['ratios']))
                 
 
-                
+    def test_parse_metrics(self) -> pd.DataFrame:
+        pass
 
+    def test_parse_income_statement(self) -> pd.DataFrame:
+        pass
+
+    def test_parse_price(self) -> pd.DataFrame:
+        pass
