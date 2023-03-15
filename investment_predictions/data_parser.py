@@ -1,7 +1,11 @@
 import pandas as pd
 from typing import Dict, List, Tuple
+import json
+from pathlib import Path 
 
-
+feature_path = Path.cwd()/'investment_predictions'/'features.json'
+with open(feature_path, 'r') as f:
+    features = json.load(f)
 
 class DataParser:
     """
@@ -18,24 +22,29 @@ class DataParser:
 
     """
 
-    def __init__(self, data_dictionary: Dict):
+    def __init__(self, data_dictionary: Dict[str, List]):
         self.data_dictionary = data_dictionary
         self.info = self.parse_info()
-        # self.ratios = self.parse_ratios()
+        self.ratios = self.parse_ratios()
         # self.metrics = self.parse_metrics()
         # self.is_ = self.parse_income_statement()
         # self.price = self.parse_price()
 
     @staticmethod
-    def json_to_dataframe(json_data):
+    def json_to_dataframe(json_data: json) -> pd.DataFrame:
         return pd.DataFrame(json_data)
     
-    def parse_info(self):
+    def parse_info(self) -> pd.DataFrame:
         json_data = self.data_dictionary['info']
         cols = ['symbol', 'companyName', 'currency', 'exchange', 'industry', 'sector']
         df_data = self.json_to_dataframe(json_data)
         return df_data[cols]
     
+    def parse_ratios(self) -> pd.DataFrame:
+        cols = features['ratios']
+        json_data = self.data_dictionary['ratios']
+        df_data = self.json_to_dataframe(json_data)
+        return df_data[cols]
 
     
     
