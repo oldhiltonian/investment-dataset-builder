@@ -41,5 +41,31 @@ class TestDataParser(unittest.TestCase):
                 expected = pd.DataFrame(d[key])
                 result = instance.json_to_dataframe(d[key])
                 self.assertEqual(expected.equals(result), True)
+
+    def test_parse_info(self):
+        for instance in parser_instance_generator():
+            instance.data_dictionary['info'] = [{'symbol': 'AAPL',
+                                                'changes': 0.4,
+                                                'companyName': 'Apple Inc.',
+                                                'currency': 'USD',
+                                                'cik': '0000320193',
+                                                'isin': 'US0378331005',
+                                                'cusip': '037833100',
+                                                'exchange': 'NASDAQ Global Select',
+                                                'exchangeShortName': 'NASDAQ',
+                                                'industry': 'Consumer Electronics',
+                                                'sector': 'Technology',
+                                                'country': 'US',
+                                                'isActivelyTrading': True,}
+                                                ]
+            expected = pd.DataFrame ([{'symbol': 'AAPL',
+                            'companyName': 'Apple Inc.',
+                            'currency': 'USD',
+                            'exchange': 'NASDAQ Global Select',
+                            'industry': 'Consumer Electronics',
+                            'sector': 'Technology',}
+                            ])
+            result = instance.parse_info()
+            self.assertEqual(expected.equals(result), True)
                 
 

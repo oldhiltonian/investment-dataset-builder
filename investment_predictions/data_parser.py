@@ -20,7 +20,7 @@ class DataParser:
 
     def __init__(self, data_dictionary: Dict):
         self.data_dictionary = data_dictionary
-        # self.info = self.parse_info()
+        self.info = self.parse_info()
         # self.ratios = self.parse_ratios()
         # self.metrics = self.parse_metrics()
         # self.is_ = self.parse_income_statement()
@@ -30,7 +30,12 @@ class DataParser:
     def json_to_dataframe(json_data):
         return pd.DataFrame(json_data)
     
-
+    def parse_info(self):
+        json_data = self.data_dictionary['info']
+        cols = ['symbol', 'companyName', 'currency', 'exchange', 'industry', 'sector']
+        df_data = self.json_to_dataframe(json_data)
+        return df_data[cols]
+    
 
     
     
