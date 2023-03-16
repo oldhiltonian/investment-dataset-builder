@@ -124,17 +124,38 @@ class TestDataParser(unittest.TestCase):
 
     def test_filter_dataframes(self):
         for instance in parser_instance_generator():
+            # Setting the dataframes to predetermined values
             instance.ratios = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
             instance.ratios.index = pd.Index(['X', 'Y', 'Z'])
             instance.metrics = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
             instance.metrics.index = pd.Index(['J', 'Z', 'N'])
             instance.is_ = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
             instance.is_.index = pd.Index(['Z', 'G', 'F'])
-            instance.filter_dataframes()
+            instance.price = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
+            instance.price.index = pd.Index(['Z', 'v', 'w'])
+            
+            # The expected dataframes after filering are as follows
             expected_ratios = pd.DataFrame({'A':3, 'B': 6, 'C': 9}, index=['Z'])
             expected_metrics = pd.DataFrame({'A':2, 'B': 5, 'C': 8}, index=['Z'])
             expected_is_ = pd.DataFrame({'A':1, 'B': 4, 'C': 7}, index=['Z'])
+            expected_price = pd.DataFrame({'A': 1, 'B': 4, 'C': 7}, index=['Z'])
+
+            # Filter then check
+            instance.filter_dataframes()
             self.assertEqual(expected_ratios.equals(instance.ratios), True)
             self.assertEqual(expected_metrics.equals(instance.metrics), True)
             self.assertEqual(expected_is_.equals(instance.is_), True)
+            self.assertEqual(expected_price.equals(instance.price), True)
+    
+
+    def test_filter_price_into_periods(self):
+        pass
+
+    def test_create_date_objects_from_strings(self):
+        pass
+
+    def test_create_date_objects_from_pd_timestamps(self):
+        pass
+
+
 

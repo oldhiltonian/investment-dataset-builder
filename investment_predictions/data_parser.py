@@ -32,8 +32,10 @@ class DataParser:
         self.ratios = self.parse_ratios()
         self.metrics = self.parse_metrics()
         self.is_ = self.parse_income_statement()
-        self.filter_dataframes()
+        # self.filter_dataframes()
         self.price = self.parse_price()
+        self.filter_price_into_periods()
+        self.filter_dataframes()
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
@@ -47,8 +49,8 @@ class DataParser:
         return pd.Index(index)
     
     @staticmethod
-    def create_period_start_date_feature(date_array):
-        dates = np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_array])
+    def create_period_start_date_feature(date_string_array):
+        dates = np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
         start_dates = dates - dt.timedelta(91)
         return [str(date) for date in start_dates]
         
@@ -88,18 +90,56 @@ class DataParser:
         return df_data[cols]
 
     def parse_price(self) -> pd.DataFrame:
-        return self.data_dictionary['price'][0]
+        data = self.data_dictionary['price'][0]
+        data['date'] = self.create_date_objects_from_pd_timestamps(data.index)
+        return data
     
     def filter_dataframes(self):
         common_idx = self.ratios.index
         common_idx = common_idx.intersection(self.metrics.index)
         common_idx = common_idx.intersection(self.is_.index)
+        common_idx = common_idx.intersection(self.price.index)
         self.ratios = self.ratios.loc[common_idx]
         self.metrics = self.metrics.loc[common_idx]
         self.is_ = self.is_.loc[common_idx]
+        self.price = self.price.loc[common_idx]
         failed_msg = "Dataframe filtering failed"
         assert self.ratios.index.equals(self.metrics.index), failed_msg
         assert self.ratios.index.equals(self.is_.index), failed_msg
+        assert self.ratios.index.equals(self.price.index), failed_msg
+
+    def filter_price_into_periods(self):
+        start_date_objects = self.create_date_objects_from_strings(self.ratios.start_date)
+        end_date_objects = self.create_date_objects_from_strings(self.ratios.date)
+        working_index = self.ratios.index
+        daily_price = self.price
+
+        filtered_data = []
+        filtered_index = []
+        for start, end, idx in zip(start_date_objects, end_date_objects, working_index):
+            try:
+                period_price = daily_price[(daily_price.date>=start) & (daily_price.date<end)]
+                max_ = max(period_price['High'])
+                min_ = min(period_price['Low'])
+                close = period_price['Close'].mean()
+                filtered_data.append([close, max_, min_])
+                filtered_index.append(idx)
+            except ValueError:
+                continue
+        
+        new_df = pd.DataFrame(filtered_data, columns=['Average', 'High', 'Low'], index=filtered_index)
+        self.price = new_df
+
+            
+
+    @staticmethod
+    def create_date_objects_from_strings(date_string_array):
+        return np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
+
+    @staticmethod
+    def create_date_objects_from_pd_timestamps(timestamp_array):
+        return np.array([dt.date(*[int(i) for i in str(stamp).split()[0].split('-')]) for stamp in timestamp_array])
+
 
     
     
