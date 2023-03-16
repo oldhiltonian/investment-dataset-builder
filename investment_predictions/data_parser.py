@@ -33,6 +33,7 @@ class DataParser:
         self.metrics = self.parse_metrics()
         self.is_ = self.parse_income_statement()
         self.price = self.parse_price()
+        self.snp_500 = self.load_snp_500()
         self.filter_price_into_periods()
         self.filter_dataframes()
         self.calculate_PE_ratios()
@@ -42,7 +43,7 @@ class DataParser:
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
         return pd.DataFrame(json_data)
     
-    def create_df_index(self, df):
+    def create_df_index(self, df: pd.DataFrame) -> pd.Index:
         ticker = self.info['symbol'][0]
         periods = df.period
         years = df.date.apply(lambda x: x.split('-')[0])
@@ -50,7 +51,7 @@ class DataParser:
         return pd.Index(index)
     
     @staticmethod
-    def create_period_start_date_feature(date_string_array):
+    def create_period_start_date_feature(date_string_array) -> List[str]:
         dates = np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
         start_dates = dates - dt.timedelta(91)
         return [str(date) for date in start_dates]
@@ -95,7 +96,7 @@ class DataParser:
         data['date'] = self.create_date_objects_from_pd_timestamps(data.index)
         return data
     
-    def filter_dataframes(self):
+    def filter_dataframes(self) -> None:
         common_idx = self.ratios.index
         common_idx = common_idx.intersection(self.metrics.index)
         common_idx = common_idx.intersection(self.is_.index)
@@ -109,7 +110,13 @@ class DataParser:
         assert self.ratios.index.equals(self.is_.index), failed_msg
         assert self.ratios.index.equals(self.price.index), failed_msg
 
-    def filter_price_into_periods(self):
+    def load_snp_500(self):
+        path = Path.cwd()/\
+                'investment_predictions'/'data'/\
+                    'snp500_trading_data_1970_to_2023.csv'
+        return pd.read_csv(path)
+
+    def filter_price_into_periods(self) -> None:
         start_date_objects = self.create_date_objects_from_strings(self.ratios.start_date)
         end_date_objects = self.create_date_objects_from_strings(self.ratios.date)
         working_index = self.ratios.index
@@ -132,24 +139,26 @@ class DataParser:
         self.price = new_df
 
     @staticmethod
-    def create_date_objects_from_strings(date_string_array):
+    def create_date_objects_from_strings(date_string_array: np.array) -> np.array:
         return np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
 
     @staticmethod
-    def create_date_objects_from_pd_timestamps(timestamp_array):
+    def create_date_objects_from_pd_timestamps(timestamp_array) -> np.array:
         return np.array([dt.date(*[int(i) for i in str(stamp).split()[0].split('-')]) for stamp in timestamp_array])
 
-    def calculate_PE_ratios(self):
+    def calculate_PE_ratios(self) -> None:
         eps = self.is_.eps
         self.ratios['PE_avg'] = self.price['Average']/(4*eps)
         self.ratios['PE_low'] = self.price['Low']/(4*eps)
         self.ratios['PE_high'] = self.price['High']/(4*eps)
 
-    def combine_dataframes(self):
+    def combine_dataframes(self) -> pd.DataFrame:
         to_drop = ['date', 'period']
         self.metrics = self.metrics.drop(to_drop, axis=1)
         self.is_ = self.is_.drop(to_drop, axis=1)
         to_join = [self.ratios, self.metrics, self.is_, self.price]
         return pd.concat(to_join, axis=1)
+    
+
     
     

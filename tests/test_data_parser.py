@@ -148,6 +148,14 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(expected_is_.equals(instance.is_), True)
             self.assertEqual(expected_price.equals(instance.price), True)
     
+    def test_load_snp_500(self):
+        path = Path.cwd()/\
+        'investment_predictions'/'data'/\
+            'snp500_trading_data_1970_to_2023.csv'
+        expected = pd.read_csv(path)
+        for instance in parser_instance_generator():
+            result = instance.load_snp_500()
+            self.assertEqual(result.equals(expected), True) 
 
     def test_filter_price_into_periods(self):
         for instance in parser_instance_generator():
