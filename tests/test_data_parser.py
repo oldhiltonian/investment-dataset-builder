@@ -134,20 +134,32 @@ class TestDataParser(unittest.TestCase):
             instance.is_.index = pd.Index(['Z', 'G', 'F'])
             instance.price = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
             instance.price.index = pd.Index(['Z', 'v', 'w'])
+            instance.snp_500 = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
+            instance.snp_500.index = pd.Index(['Z', 'v', 'w'])
             
             # The expected dataframes after filering are as follows
             expected_ratios = pd.DataFrame({'A':3, 'B': 6, 'C': 9}, index=['Z'])
             expected_metrics = pd.DataFrame({'A':2, 'B': 5, 'C': 8}, index=['Z'])
             expected_is_ = pd.DataFrame({'A':1, 'B': 4, 'C': 7}, index=['Z'])
             expected_price = pd.DataFrame({'A': 1, 'B': 4, 'C': 7}, index=['Z'])
+            expected_snp = pd.DataFrame({'A': 1, 'B': 4, 'C': 7}, index=['Z'])
 
-            # Filter then check
+            # Filter then check to assert True
             instance.filter_dataframes()
             self.assertEqual(expected_ratios.equals(instance.ratios), True)
             self.assertEqual(expected_metrics.equals(instance.metrics), True)
             self.assertEqual(expected_is_.equals(instance.is_), True)
             self.assertEqual(expected_price.equals(instance.price), True)
+            self.assertEqual(expected_snp.equals(instance.snp_500), True)
+
+            # And finally forcing an error
+            instance.snp_500 = pd.DataFrame({'A': [1,2,6], 'B': [4,0,6], 'C': [7,8,9]})
+            instance.snp_500.index = pd.Index(['a', 'b', 'c'])
+            with self.assertRaises(AssertionError):
+                self.assertEqual(expected_snp.equals(instance.snp_500), True)
     
+
+
     def test_load_snp_500(self):
         path = Path.cwd()/\
         'investment_predictions'/'data'/\
@@ -179,9 +191,9 @@ class TestDataParser(unittest.TestCase):
                                       })
             expected = pd.DataFrame(
                 {
-                'Average': [6.5, 8.5, 10.5, 12.0],
-                'High': [12, 14, 16, 17],
-                'Low': [2, 4, 6, 8]
+                'stockPriceAverage': [6.5, 8.5, 10.5, 12.0],
+                'stockPriceHigh': [12, 14, 16, 17],
+                'stockPriceLow': [2, 4, 6, 8]
                 }, index = ['idx1', 'idx2', 'idx3', 'idx4']
                 )
             instance.price = instance.filter_daily_into_quarters(price)
