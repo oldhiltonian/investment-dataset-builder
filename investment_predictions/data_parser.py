@@ -32,9 +32,8 @@ class DataParser:
         self.ratios = self.parse_ratios()
         self.metrics = self.parse_metrics()
         self.is_ = self.parse_income_statement()
-        self.price = self.parse_price()
-        self.snp_500 = self.load_snp_500()
-        self.filter_price_into_periods()
+        self.price = self.filter_daily_into_quarters(self.parse_price())
+        self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500())
         self.filter_dataframes()
         self.calculate_PE_ratios()
         self.final_data = self.combine_dataframes()
@@ -113,20 +112,21 @@ class DataParser:
     def load_snp_500(self):
         path = Path.cwd()/\
                 'investment_predictions'/'data'/\
-                    'snp500_trading_data_1970_to_2023.csv'
-        return pd.read_csv(path)
+                    'snp500_trading_data_1970_to_2023.parquet'
+        df =  pd.read_parquet(path)
+        df['date'] = self.create_date_objects_from_pd_timestamps(df.index)
+        return df
 
-    def filter_price_into_periods(self) -> None:
+    def filter_daily_into_quarters(self, df: pd.DataFrame) -> None:
         start_date_objects = self.create_date_objects_from_strings(self.ratios.start_date)
         end_date_objects = self.create_date_objects_from_strings(self.ratios.date)
         working_index = self.ratios.index
-        daily_price = self.price
 
         filtered_data = []
         filtered_index = []
         for start, end, idx in zip(start_date_objects, end_date_objects, working_index):
             try:
-                period_price = daily_price[(daily_price.date>=start) & (daily_price.date<end)]
+                period_price = df[(df.date>=start) & (df.date<end)]
                 max_ = max(period_price['High'])
                 min_ = min(period_price['Low'])
                 close = period_price['Close'].mean()
@@ -136,7 +136,7 @@ class DataParser:
                 continue
         
         new_df = pd.DataFrame(filtered_data, columns=['Average', 'High', 'Low'], index=filtered_index)
-        self.price = new_df
+        return new_df
 
     @staticmethod
     def create_date_objects_from_strings(date_string_array: np.array) -> np.array:

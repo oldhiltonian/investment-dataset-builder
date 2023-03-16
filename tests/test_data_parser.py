@@ -157,7 +157,7 @@ class TestDataParser(unittest.TestCase):
             result = instance.load_snp_500()
             self.assertEqual(result.equals(expected), True) 
 
-    def test_filter_price_into_periods(self):
+    def test_filter_daily_into_quarters(self):
         for instance in parser_instance_generator():
             instance.ratios = pd.DataFrame(
                 {
@@ -172,7 +172,7 @@ class TestDataParser(unittest.TestCase):
                 '2002-01-01', '2005-10-11', '2006-01-01','2008-02-10', '2010-01-01']
             )
 
-            instance.price = pd.DataFrame({'High': [i+10 for i in range(len(price_dates))],
+            price = pd.DataFrame({'High': [i+10 for i in range(len(price_dates))],
                                             'Low': [i+1 for i in range(len(price_dates))],
                                             'Close': [i+5 for i in range(len(price_dates))],
                                             'date': price_dates
@@ -184,7 +184,7 @@ class TestDataParser(unittest.TestCase):
                 'Low': [2, 4, 6, 8]
                 }, index = ['idx1', 'idx2', 'idx3', 'idx4']
                 )
-            instance.filter_price_into_periods()
+            instance.price = instance.filter_daily_into_quarters(price)
             self.assertEqual(expected.equals(instance.price), True)
 
     def test_create_date_objects_from_strings(self):
