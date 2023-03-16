@@ -16,9 +16,11 @@ class DataParser:
     the returned DataFrame is specific to that single company. The current DataScraper design
     should only be used with "company" as the data_type argument, and thus the only acceptable
     keys in the DataScraper.data_dictionary are 'info', 'metrics', 'ratios', 'is' and, 'price'.
-    When parsed, only relevant data is passed back from each of the sub-dictionaries. This
-    means that duplicate features are not retured from self.parse_metrics() is that feature
-    is already returned from self.parse_ratios().
+    When parsed, only relevant data is passed back from each of the sub-dictionaries. The
+    relevant data is defined in the local features.json file that should be present in the
+    same directory as this data_parser.py file. Duplicate features are not retured e.g. 
+    self.parse_metrics() does not return features that are already returned from 
+    self.parse_ratios().
 
     """
 

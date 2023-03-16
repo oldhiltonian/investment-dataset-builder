@@ -47,7 +47,15 @@ class TestDataParser(unittest.TestCase):
                 self.assertEqual(expected.equals(result), True)
 
     def test_create_df_index(self):
-        pass
+        for instance in parser_instance_generator():
+            instance.info['symbol'][0] = 'TEST'
+            test_df = pd.DataFrame([['Q1', '2000-01-12'],
+                                   ['Q4', '1995-11-10'],
+                                   ['Q3', '2020-07-28']],
+                                   columns=['period', 'date'])
+            expected_index = pd.Index(['TEST-Q1-2000', 'TEST-Q4-1995', 'TEST-Q3-2020'])
+            result_index = instance.create_df_index(test_df)
+            self.assertEqual(result_index.equals(expected_index), True)
 
     def test_parse_info(self):
         for instance in parser_instance_generator():
