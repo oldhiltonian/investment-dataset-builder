@@ -104,10 +104,12 @@ class DataParser:
         self.metrics = self.metrics.loc[common_idx]
         self.is_ = self.is_.loc[common_idx]
         self.price = self.price.loc[common_idx]
+        self.snp_500 = self.snp_500.loc[common_idx]
         failed_msg = "Dataframe filtering failed"
         assert self.ratios.index.equals(self.metrics.index), failed_msg
         assert self.ratios.index.equals(self.is_.index), failed_msg
         assert self.ratios.index.equals(self.price.index), failed_msg
+        assert self.ratios.index.equals(self.snp_500.index), failed_msg
 
     def load_snp_500(self):
         path = Path.cwd()/\
@@ -135,7 +137,10 @@ class DataParser:
             except ValueError:
                 continue
         
-        new_df = pd.DataFrame(filtered_data, columns=['Average', 'High', 'Low'], index=filtered_index)
+        new_df = pd.DataFrame(filtered_data, columns=['stockPriceAverage', 
+                                                      'stockPriceHigh', 
+                                                      'stockPriceLow'], 
+                                                      index=filtered_index)
         return new_df
 
     @staticmethod
@@ -148,9 +153,9 @@ class DataParser:
 
     def calculate_PE_ratios(self) -> None:
         eps = self.is_.eps
-        self.ratios['PE_avg'] = self.price['Average']/(4*eps)
-        self.ratios['PE_low'] = self.price['Low']/(4*eps)
-        self.ratios['PE_high'] = self.price['High']/(4*eps)
+        self.ratios['PE_avg'] = self.price['stockPriceAverage']/(4*eps)
+        self.ratios['PE_low'] = self.price['stockPriceLow']/(4*eps)
+        self.ratios['PE_high'] = self.price['stockPriceHigh']/(4*eps)
 
     def combine_dataframes(self) -> pd.DataFrame:
         to_drop = ['date', 'period']
