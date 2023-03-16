@@ -91,7 +91,7 @@ class TestDataParser(unittest.TestCase):
         for instance in parser_instance_generator():
             result_df = instance.parse_ratios()
             result_cols = result_df.columns.to_list()
-            expected_cols = features['ratios']
+            expected_cols = features['ratios']+['start_date']
             self.assertEqual(result_cols, expected_cols)
             self.assertEqual(len(result_df), len(instance.data_dictionary['ratios']))
                 
@@ -101,7 +101,7 @@ class TestDataParser(unittest.TestCase):
         for instance in parser_instance_generator():
             result_df = instance.parse_metrics()
             result_cols = result_df.columns.to_list()
-            expected_cols = features['metrics']
+            expected_cols = features['metrics']+['start_date']
             self.assertEqual(result_cols, expected_cols)
             self.assertEqual(len(result_df), len(instance.data_dictionary['metrics']))
 
@@ -110,7 +110,7 @@ class TestDataParser(unittest.TestCase):
         for instance in parser_instance_generator():
             result_df = instance.parse_income_statement()
             result_cols = result_df.columns.to_list()
-            expected_cols = features['is']
+            expected_cols = features['is']+['start_date']
             self.assertEqual(result_cols, expected_cols)
             self.assertEqual(len(result_df), len(instance.data_dictionary['is']))
 
@@ -118,7 +118,7 @@ class TestDataParser(unittest.TestCase):
         '''Currently just asserts that the columns and data shapes are correct'''
         for instance in parser_instance_generator():
             df = instance.parse_price()
-            expected_cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
+            expected_cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'date']
             result_cols = df.columns.to_list()
             self.assertEqual(result_cols, expected_cols)
             self.assertGreater(len(df), 84)
@@ -144,7 +144,7 @@ class TestDataParser(unittest.TestCase):
             expected_price = pd.DataFrame({'A': 1, 'B': 4, 'C': 7}, index=['Z'])
             expected_snp = pd.DataFrame({'A': 1, 'B': 4, 'C': 7}, index=['Z'])
 
-            # Filter then check to assert True
+            # Filter, then check to assert True
             instance.filter_dataframes()
             self.assertEqual(expected_ratios.equals(instance.ratios), True)
             self.assertEqual(expected_metrics.equals(instance.metrics), True)
@@ -152,21 +152,21 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(expected_price.equals(instance.price), True)
             self.assertEqual(expected_snp.equals(instance.snp_500), True)
 
-            # And finally forcing an error
+            # And finally force an error
             instance.snp_500 = pd.DataFrame({'A': [1,2,6], 'B': [4,0,6], 'C': [7,8,9]})
             instance.snp_500.index = pd.Index(['a', 'b', 'c'])
             with self.assertRaises(AssertionError):
                 self.assertEqual(expected_snp.equals(instance.snp_500), True)
-    
-
 
     def test_load_snp_500(self):
         path = Path.cwd()/\
         'investment_predictions'/'data'/\
-            'snp500_trading_data_1970_to_2023.csv'
-        expected = pd.read_csv(path)
+            'snp500_trading_data_1970_to_2023.parquet'
+        
+        # expected['date'] = instance.create_date_objects_from_pd_timestamps(df.index)
         for instance in parser_instance_generator():
-            result = instance.load_snp_500()
+            expected = pd.read_parquet(path)
+            result = instance.load_snp_500().drop('date', axis=1)
             self.assertEqual(result.equals(expected), True) 
 
     def test_filter_daily_into_quarters(self):
@@ -224,9 +224,9 @@ class TestDataParser(unittest.TestCase):
             )
 
             instance.price = pd.DataFrame(
-                {'Average': [5, 10, 30, 100],
-                 'High': [10, 20, 60, 200],
-                 'Low': [1, 5, 15, 50]}
+                {'stockPriceAverage': [20, 40, 120, 400],
+                 'stockPriceHigh': [40, 80, 240, 800],
+                 'stockPriceLow': [4, 20, 60, 200]}
             )
 
             instance.ratios = pd.DataFrame()
@@ -236,9 +236,7 @@ class TestDataParser(unittest.TestCase):
                  'PE_low': [0.2, 0.5, 1.0, 2.5],
                  'PE_high': [2.0, 2.0, 4.0, 10.0]}
             )
-
             self.assertEqual(expected.equals(instance.ratios), True)
-
 
     def test_combine_dataframes(self):
         df_index = ['a', 'b', 'c', 'd']
@@ -269,6 +267,12 @@ class TestDataParser(unittest.TestCase):
                  'Average': [5,5,5,5]},
                  index = df_index
             )
+            instance.snp_500 = pd.DataFrame(
+                {'SHigh': [100, 100, 100, 10],
+                 'SLow': [10,20,20,1],
+                 'SAverage': [50,50,50,5]},
+                 index = df_index
+            )
             expected = pd.DataFrame(
                 {'date': [1,2,3,4],
                  'period': [1,2,3,4],
@@ -279,10 +283,14 @@ class TestDataParser(unittest.TestCase):
                  'is2': [4,4,4,4],
                  'High': [10, 10, 10, 10],
                  'Low': [1,2,2,1],
-                 'Average': [5,5,5,5]},
+                 'Average': [5,5,5,5],
+                 'SHigh': [100, 100, 100, 10],
+                 'SLow': [10,20,20,1],
+                 'SAverage': [50,50,50,5]},
                  index = df_index
             )
-            print(expected)
             result = instance.combine_dataframes()
-            print(result)
             self.assertEqual(result.equals(expected), True)
+
+    def test_calculate_returns(self):
+        pass

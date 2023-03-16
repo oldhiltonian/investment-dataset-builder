@@ -33,7 +33,7 @@ class DataParser:
         self.metrics = self.parse_metrics()
         self.is_ = self.parse_income_statement()
         self.price = self.filter_daily_into_quarters(self.parse_price())
-        self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500())
+        self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), 'S&P500')
         self.filter_dataframes()
         self.calculate_PE_ratios()
         self.final_data = self.combine_dataframes()
@@ -119,7 +119,7 @@ class DataParser:
         df['date'] = self.create_date_objects_from_pd_timestamps(df.index)
         return df
 
-    def filter_daily_into_quarters(self, df: pd.DataFrame) -> None:
+    def filter_daily_into_quarters(self, df: pd.DataFrame, tag: str='stock') -> None:
         start_date_objects = self.create_date_objects_from_strings(self.ratios.start_date)
         end_date_objects = self.create_date_objects_from_strings(self.ratios.date)
         working_index = self.ratios.index
@@ -137,9 +137,9 @@ class DataParser:
             except ValueError:
                 continue
         
-        new_df = pd.DataFrame(filtered_data, columns=['stockPriceAverage', 
-                                                      'stockPriceHigh', 
-                                                      'stockPriceLow'], 
+        new_df = pd.DataFrame(filtered_data, columns=[f'{tag}PriceAverage', 
+                                                      f'{tag}PriceHigh', 
+                                                      f'{tag}PriceLow'], 
                                                       index=filtered_index)
         return new_df
 
@@ -161,9 +161,9 @@ class DataParser:
         to_drop = ['date', 'period']
         self.metrics = self.metrics.drop(to_drop, axis=1)
         self.is_ = self.is_.drop(to_drop, axis=1)
-        to_join = [self.ratios, self.metrics, self.is_, self.price]
+        to_join = [self.ratios, self.metrics, self.is_, self.price, self.snp_500]
         return pd.concat(to_join, axis=1)
     
-
-    
+    def calculate_returns(self):
+        pass
     
