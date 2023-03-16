@@ -99,6 +99,13 @@
                 "tangibleAssetValue",
                 "tangibleBookValuePerShare",
                 "workingCapital"
-             ]
+             ],
+    
+    "is" : [
+      "date",
+      "period",
+      "ebitdaratio"
+    ]
+
   }
   

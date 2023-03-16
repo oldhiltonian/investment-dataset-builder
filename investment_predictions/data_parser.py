@@ -26,14 +26,21 @@ class DataParser:
         self.data_dictionary = data_dictionary
         self.info = self.parse_info()
         self.ratios = self.parse_ratios()
-        # self.metrics = self.parse_metrics()
-        # self.is_ = self.parse_income_statement()
-        # self.price = self.parse_price()
+        self.metrics = self.parse_metrics()
+        self.is_ = self.parse_income_statement()
+        self.price = self.parse_price()
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
         return pd.DataFrame(json_data)
     
+    def create_df_index(self, df):
+        ticker = self.info['symbol'][0]
+        periods = df.period
+        years = df.date.apply(lambda x: x.split('-')[0])
+        index = ticker+'-'+periods+'-'+years
+        return pd.Index(index)
+
     def parse_info(self) -> pd.DataFrame:
         json_data = self.data_dictionary['info']
         cols = ['symbol', 'companyName', 'currency', 'exchange', 'industry', 'sector']
@@ -53,7 +60,10 @@ class DataParser:
         return df_data[cols]
 
     def parse_income_statement(self) -> pd.DataFrame:
-        pass
+        cols = features['is']
+        json_data = self.data_dictionary['is']
+        df_data = self.json_to_dataframe(json_data)
+        return df_data[cols]
 
     def parse_price(self) -> pd.DataFrame:
         return self.data_dictionary['price'][0]

@@ -46,6 +46,9 @@ class TestDataParser(unittest.TestCase):
                 result = instance.json_to_dataframe(d[key])
                 self.assertEqual(expected.equals(result), True)
 
+    def test_create_df_index(self):
+        pass
+
     def test_parse_info(self):
         for instance in parser_instance_generator():
             instance.data_dictionary['info'] = [{'symbol': 'AAPL',
@@ -82,7 +85,8 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(len(result_df), len(instance.data_dictionary['ratios']))
                 
 
-    def test_parse_metrics(self) -> pd.DataFrame:
+    def test_parse_metrics(self):
+        '''Currently just asserts that the columns and data shapes are correct'''
         for instance in parser_instance_generator():
             result_df = instance.parse_metrics()
             result_cols = result_df.columns.to_list()
@@ -90,8 +94,19 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(result_cols, expected_cols)
             self.assertEqual(len(result_df), len(instance.data_dictionary['metrics']))
 
-    def test_parse_income_statement(self) -> pd.DataFrame:
-        pass
+    def test_parse_income_statement(self):
+        '''Currently just asserts that the columns and data shapes are correct'''
+        for instance in parser_instance_generator():
+            result_df = instance.parse_income_statement()
+            result_cols = result_df.columns.to_list()
+            expected_cols = features['is']
+            self.assertEqual(result_cols, expected_cols)
+            self.assertEqual(len(result_df), len(instance.data_dictionary['is']))
 
-    def test_parse_price(self) -> pd.DataFrame:
-        pass
+    def test_parse_price(self):
+        for instance in parser_instance_generator():
+            df = instance.parse_price()
+            expected_cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
+            result_cols = df.columns.to_list()
+            self.assertEqual(result_cols, expected_cols)
+            self.assertGreater(len(df), 84)
