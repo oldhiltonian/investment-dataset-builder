@@ -115,6 +115,7 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(len(result_df), len(instance.data_dictionary['is']))
 
     def test_parse_price(self):
+        '''Currently just asserts that the columns and data shapes are correct'''
         for instance in parser_instance_generator():
             df = instance.parse_price()
             expected_cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
@@ -215,6 +216,6 @@ class TestDataParser(unittest.TestCase):
                  'PE_low': [0.2, 0.5, 1.0, 2.5],
                  'PE_high': [2.0, 2.0, 4.0, 10.0]}
             )
-            
+
             self.assertEqual(expected.equals(instance.ratios), True)
 

@@ -36,6 +36,7 @@ class DataParser:
         self.filter_price_into_periods()
         self.filter_dataframes()
         self.calculate_PE_ratios()
+        self.final_data = self.combine_dataframes()
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
@@ -143,5 +144,12 @@ class DataParser:
         self.ratios['PE_avg'] = self.price['Average']/(4*eps)
         self.ratios['PE_low'] = self.price['Low']/(4*eps)
         self.ratios['PE_high'] = self.price['High']/(4*eps)
+
+    def combine_dataframes(self):
+        to_drop = ['date', 'period']
+        self.metrics = self.metrics.drop(to_drop, axis=1)
+        self.is_ = self.is_.drop(to_drop, axis=1)
+        to_join = [self.ratios, self.metrics, self.is_, self.price]
+        return pd.concat(to_join, axis=1)
     
     
