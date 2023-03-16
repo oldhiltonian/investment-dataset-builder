@@ -160,6 +160,13 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(result, expected)
 
     def test_create_date_objects_from_pd_timestamps(self):
-        pass
+        from pandas._libs.tslibs.timestamps import Timestamp as ts
+        date_string_array = ['2000-01-01', '2020-10-12', "2023-01-19", "2019-07-12"]
+        timestamp_array = [ts(i) for i in date_string_array]
+        expected = [dt.date(2000, 1, 1), dt.date(2020, 10, 12), dt.date(2023, 1, 19),
+                    dt.date(2019, 7, 12)]
+        for instance in parser_instance_generator():
+            result = list(instance.create_date_objects_from_pd_timestamps(timestamp_array))
+            self.assertEqual(result, expected)
 
 
