@@ -149,7 +149,34 @@ class TestDataParser(unittest.TestCase):
     
 
     def test_filter_price_into_periods(self):
-        pass
+        for instance in parser_instance_generator():
+            instance.ratios = pd.DataFrame(
+                {
+                'start_date': ['2000-01-01', '2000-03-10', '2005-10-11', '2008-02-10'],
+                'date': ['2000-03-10', '2005-10-11', '2008-02-10', '2010-01-01'],
+                }, 
+                index=['idx1', 'idx2', 'idx3', 'idx4']
+            )
+
+            price_dates = instance.create_date_objects_from_strings(
+                ['1999-01-01', '2000-01-03', '2000-02-02', '2000-03-10', 
+                '2002-01-01', '2005-10-11', '2006-01-01','2008-02-10', '2010-01-01']
+            )
+
+            instance.price = pd.DataFrame({'High': [i+10 for i in range(len(price_dates))],
+                                            'Low': [i+1 for i in range(len(price_dates))],
+                                            'Close': [i+5 for i in range(len(price_dates))],
+                                            'date': price_dates
+                                      })
+            expected = pd.DataFrame(
+                {
+                'Average': [6.5, 8.5, 10.5, 12.0],
+                'High': [12, 14, 16, 17],
+                'Low': [2, 4, 6, 8]
+                }, index = ['idx1', 'idx2', 'idx3', 'idx4']
+                )
+            instance.filter_price_into_periods()
+            self.assertEqual(expected.equals(instance.price), True)
 
     def test_create_date_objects_from_strings(self):
         date_string_array = ['2000-01-01', '2020-10-12', "2023-01-19", "2019-07-12"]
