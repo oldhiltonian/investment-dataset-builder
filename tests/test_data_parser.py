@@ -57,6 +57,9 @@ class TestDataParser(unittest.TestCase):
             result_index = instance.create_df_index(test_df)
             self.assertEqual(result_index.equals(expected_index), True)
 
+    def test_create_period_start_date_feature(self):
+        pass
+
     def test_parse_info(self):
         for instance in parser_instance_generator():
             instance.data_dictionary['info'] = [{'symbol': 'AAPL',
@@ -118,3 +121,20 @@ class TestDataParser(unittest.TestCase):
             result_cols = df.columns.to_list()
             self.assertEqual(result_cols, expected_cols)
             self.assertGreater(len(df), 84)
+
+    def test_filter_dataframes(self):
+        for instance in parser_instance_generator():
+            instance.ratios = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
+            instance.ratios.index = pd.Index(['X', 'Y', 'Z'])
+            instance.metrics = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
+            instance.metrics.index = pd.Index(['J', 'Z', 'N'])
+            instance.is_ = pd.DataFrame({'A': [1,2,3], 'B': [4,5,6], 'C': [7,8,9]})
+            instance.is_.index = pd.Index(['Z', 'G', 'F'])
+            instance.filter_dataframes()
+            expected_ratios = pd.DataFrame({'A':3, 'B': 6, 'C': 9}, index=['Z'])
+            expected_metrics = pd.DataFrame({'A':2, 'B': 5, 'C': 8}, index=['Z'])
+            expected_is_ = pd.DataFrame({'A':1, 'B': 4, 'C': 7}, index=['Z'])
+            self.assertEqual(expected_ratios.equals(instance.ratios), True)
+            self.assertEqual(expected_metrics.equals(instance.metrics), True)
+            self.assertEqual(expected_is_.equals(instance.is_), True)
+
