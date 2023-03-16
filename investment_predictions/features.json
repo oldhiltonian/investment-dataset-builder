@@ -104,6 +104,7 @@
     "is" : [
       "date",
       "period",
+      "eps",
       "ebitdaratio"
     ]
 

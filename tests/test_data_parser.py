@@ -196,4 +196,25 @@ class TestDataParser(unittest.TestCase):
             result = list(instance.create_date_objects_from_pd_timestamps(timestamp_array))
             self.assertEqual(result, expected)
 
+    def test_calculate_PE_ratios(self):
+        for instance in parser_instance_generator():
+            instance.is_ = pd.DataFrame(
+                {'eps': [5, 10, 15, 20]}
+            )
+
+            instance.price = pd.DataFrame(
+                {'Average': [5, 10, 30, 100],
+                 'High': [10, 20, 60, 200],
+                 'Low': [1, 5, 15, 50]}
+            )
+
+            instance.ratios = pd.DataFrame()
+            instance.calculate_PE_ratios()
+            expected = pd.DataFrame(
+                {'PE_avg': [1.0, 1.0, 2.0, 5.0],
+                 'PE_low': [0.2, 0.5, 1.0, 2.5],
+                 'PE_high': [2.0, 2.0, 4.0, 10.0]}
+            )
+            
+            self.assertEqual(expected.equals(instance.ratios), True)
 

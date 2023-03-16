@@ -32,10 +32,10 @@ class DataParser:
         self.ratios = self.parse_ratios()
         self.metrics = self.parse_metrics()
         self.is_ = self.parse_income_statement()
-        # self.filter_dataframes()
         self.price = self.parse_price()
         self.filter_price_into_periods()
         self.filter_dataframes()
+        self.calculate_PE_ratios()
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
@@ -130,8 +130,6 @@ class DataParser:
         new_df = pd.DataFrame(filtered_data, columns=['Average', 'High', 'Low'], index=filtered_index)
         self.price = new_df
 
-            
-
     @staticmethod
     def create_date_objects_from_strings(date_string_array):
         return np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
@@ -140,6 +138,10 @@ class DataParser:
     def create_date_objects_from_pd_timestamps(timestamp_array):
         return np.array([dt.date(*[int(i) for i in str(stamp).split()[0].split('-')]) for stamp in timestamp_array])
 
-
+    def calculate_PE_ratios(self):
+        eps = self.is_.eps
+        self.ratios['PE_avg'] = self.price['Average']/(4*eps)
+        self.ratios['PE_low'] = self.price['Low']/(4*eps)
+        self.ratios['PE_high'] = self.price['High']/(4*eps)
     
     
