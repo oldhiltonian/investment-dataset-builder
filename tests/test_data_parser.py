@@ -83,7 +83,12 @@ class TestDataParser(unittest.TestCase):
                 
 
     def test_parse_metrics(self) -> pd.DataFrame:
-        pass
+        for instance in parser_instance_generator():
+            result_df = instance.parse_metrics()
+            result_cols = result_df.columns.to_list()
+            expected_cols = features['metrics']
+            self.assertEqual(result_cols, expected_cols)
+            self.assertEqual(len(result_df), len(instance.data_dictionary['metrics']))
 
     def test_parse_income_statement(self) -> pd.DataFrame:
         pass

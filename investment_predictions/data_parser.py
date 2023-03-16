@@ -31,7 +31,7 @@ class DataParser:
         # self.price = self.parse_price()
 
     @staticmethod
-    def json_to_dataframe(json_data: json) -> pd.DataFrame:
+    def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
         return pd.DataFrame(json_data)
     
     def parse_info(self) -> pd.DataFrame:
@@ -47,7 +47,10 @@ class DataParser:
         return df_data[cols]
     
     def parse_metrics(self) -> pd.DataFrame:
-        pass
+        cols = features['metrics']
+        json_data = self.data_dictionary['metrics']
+        df_data = self.json_to_dataframe(json_data)
+        return df_data[cols]
 
     def parse_income_statement(self) -> pd.DataFrame:
         pass
