@@ -219,3 +219,50 @@ class TestDataParser(unittest.TestCase):
 
             self.assertEqual(expected.equals(instance.ratios), True)
 
+
+    def test_combine_dataframes(self):
+        df_index = ['a', 'b', 'c', 'd']
+        for instance in parser_instance_generator():
+            instance.ratios = pd.DataFrame(
+                {'date': [1,2,3,4],
+                 'period': [1,2,3,4],
+                 'r1': [1,2,3,4]},
+                 index = df_index
+            )
+            instance.metrics = pd.DataFrame(
+                {'m1': [4,5,6,7],
+                 'm2': [4,5,6,7],
+                 'date': [0,0,0,0],
+                 'period': [0,0,0,0]},
+                 index = df_index
+            )
+            instance.is_ = pd.DataFrame(
+                {'date': [0,0,0,0],
+                 'period': [0,0,0,0],
+                 'is1': [3,3,3,3],
+                 'is2': [4,4,4,4]},
+                 index=df_index
+            )
+            instance.price = pd.DataFrame(
+                {'High': [10, 10, 10, 10],
+                 'Low': [1,2,2,1],
+                 'Average': [5,5,5,5]},
+                 index = df_index
+            )
+            expected = pd.DataFrame(
+                {'date': [1,2,3,4],
+                 'period': [1,2,3,4],
+                 'r1': [1,2,3,4],
+                 'm1': [4,5,6,7],
+                 'm2': [4,5,6,7],
+                 'is1': [3,3,3,3],
+                 'is2': [4,4,4,4],
+                 'High': [10, 10, 10, 10],
+                 'Low': [1,2,2,1],
+                 'Average': [5,5,5,5]},
+                 index = df_index
+            )
+            print(expected)
+            result = instance.combine_dataframes()
+            print(result)
+            self.assertEqual(result.equals(expected), True)

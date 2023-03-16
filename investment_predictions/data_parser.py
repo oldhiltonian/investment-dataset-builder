@@ -12,7 +12,7 @@ with open(feature_path, 'r') as f:
 class DataParser:
     """
     This class is built to accept the DataScraper.data_dictionary ditionary, parse the 
-    data and return a single DataFrame that represents the data for that company. 
+    data and create a single DataFrame that represents the data for that company. 
 
     The dictionary passed as an argument contains data relevant to a single company, and thus
     the returned DataFrame is specific to that single company. The current DataScraper design
