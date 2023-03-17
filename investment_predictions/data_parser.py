@@ -1,3 +1,11 @@
+### TODO: Comment with docstrings
+### TODO: Calculate returns and the associated unittest
+
+
+
+
+
+
 import pandas as pd
 from typing import Dict, List, Tuple
 import json
