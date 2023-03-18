@@ -187,4 +187,7 @@ class TestDataScraper(unittest.TestCase):
             self.assertEqual(len(data), expected_length)
             for key in data.keys():
                 self.assertIsInstance(key, str)
-                self.assertIsInstance(data[key], list)
+                if key != 'price':
+                    self.assertIsInstance(data[key], list)
+                else:
+                    self.assertIsInstance(data[key], pd.DataFrame)

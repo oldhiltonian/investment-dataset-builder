@@ -125,10 +125,15 @@ class DataParser:
             None
         """
         self.data_dictionary = data_dictionary
-        self.info = self.parse_info()
-        self.ratios = self.parse_ratios()
-        self.metrics = self.parse_metrics()
-        self.is_ = self.parse_income_statement()
+        self.info = self.pasrse_data_dictionary('info')
+        self.ratios = self.pasrse_data_dictionary('ratios')
+        self.metrics = self.pasrse_data_dictionary('metrics')
+        self.is_ = self.pasrse_data_dictionary('is')
+        self.price = self.filter_daily_into_quarters(self.pasrse_data_dictionary('price'))
+        # self.info = self.parse_info()
+        # self.ratios = self.parse_ratios()
+        # self.metrics = self.parse_metrics()
+        # self.is_ = self.parse_income_statement()
         self.price = self.filter_daily_into_quarters(self.parse_price())
         self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), "S&P500")
         self.filter_dataframes()
@@ -184,8 +189,24 @@ class DataParser:
         start_dates = dates - dt.timedelta(91)
         return [str(date) for date in start_dates]
 
-    def pasrse_data_dictionary(self):
-        pass
+    def pasrse_data_dictionary(self, key: str):
+        assert key in ['info', 'ratios', 'metrics', 'is', 'price'], "invalid key"
+        if key != 'price':
+            json_data = self.data_dictionary[key]
+            df_data = self.json_to_dataframe(json_data)
+            if key != 'info':
+                df_data["start_date"] = \
+                    self.create_period_start_date_feature(df_data.date)
+                df_data.index = self.create_df_index(df_data)
+                cols = features[key] + ["start_date"]
+            else:
+                cols = features['info']
+        else:
+            df_data = self.data_dictionary[key]
+            df_data["date"] = self.create_date_objects_from_pd_timestamps(df_data.index)
+            cols = features['price'] + ["date"]
+        return df_data[cols]
+            
 
     def parse_info(self) -> pd.DataFrame:
         json_data = self.data_dictionary["info"]
@@ -218,10 +239,10 @@ class DataParser:
         return df_data[cols]
 
     def parse_price(self) -> pd.DataFrame:
-        data = self.data_dictionary["price"][0]
-        data["date"] = self.create_date_objects_from_pd_timestamps(data.index)
+        df_data = self.data_dictionary["price"]
+        df_data["date"] = self.create_date_objects_from_pd_timestamps(df_data.index)
         cols = features['price'] + ["date"]
-        return data[cols]
+        return df_data[cols]
 
     def filter_dataframes(self) -> None:
         """

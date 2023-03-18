@@ -200,5 +200,5 @@ class DataScraper:
                 data = self.convert_raw_data_to_json(response)
                 data_dictionary[string] = data
         stock_price_data = self.fetch_stock_price_data()
-        data_dictionary["price"] = [stock_price_data]
+        data_dictionary["price"] = stock_price_data
         return data_dictionary
