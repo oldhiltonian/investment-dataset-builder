@@ -16,6 +16,6 @@ key_path = Path().home() / "desktop" / "FinancialModellingPrep_API.txt"
 with open(key_path) as file:
     api_key = file.read()
 
-feature_path = Path.cwd()/'investment_predictions'/'features.json'
-with open(feature_path, 'r') as f:
+feature_path = Path.cwd() / "investment_predictions" / "features.json"
+with open(feature_path, "r") as f:
     features = json.load(f)

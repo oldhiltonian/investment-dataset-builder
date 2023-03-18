@@ -2,108 +2,233 @@
 ### TODO: Calculate returns and the associated unittest
 
 
-
-
-
-
 import pandas as pd
 from typing import Dict, List, Tuple
 import json
-from pathlib import Path 
+from pathlib import Path
 import datetime as dt
 import numpy as np
 
-feature_path = Path.cwd()/'investment_predictions'/'features.json'
-with open(feature_path, 'r') as f:
+feature_path = Path.cwd() / "investment_predictions" / "features.json"
+with open(feature_path, "r") as f:
     features = json.load(f)
+
 
 class DataParser:
     """
     This class is built to accept the DataScraper.data_dictionary ditionary, parse the 
     data and create a single DataFrame that represents the data for that company. 
 
-    The dictionary passed as an argument contains data relevant to a single company, and thus
-    the returned DataFrame is specific to that single company. The current DataScraper design
-    should only be used with "company" as the data_type argument, and thus the only acceptable
-    keys in the DataScraper.data_dictionary are 'info', 'metrics', 'ratios', 'is' and, 'price'.
-    When parsed, only relevant data is passed back from each of the sub-dictionaries. The
-    relevant data is defined in the local features.json file that should be present in the
-    same directory as this data_parser.py file. Duplicate features are not retured e.g. 
+    The dictionary passed as an argument contains data relevant to a single company, 
+    and thus the returned DataFrame is specific to that single company. The current 
+    DataScraper design should only be used with "company" as the data_type argument,
+    and thus the only acceptable keys in the DataScraper.data_dictionary are 'info', 
+    'metrics', 'ratios', 'is' and, 'price'. When parsed, only relevant data is 
+    passed back from each of the sub-dictionaries. The relevant data is defined in 
+    the local features.json file that should be present in the same directory as 
+    this data_parser.py file. Duplicate features are not retured e.g.: 
     self.parse_metrics() does not return features that are already returned from 
     self.parse_ratios().
+
+    Args:
+    data_dictionary (Dict[str, List]): A dictionary containing data relevant to a 
+    single company.
+
+    Attributes:
+        data_dictionary (Dict[str, List]): A dictionary containing data relevant 
+            to a single company.
+        info (pd.DataFrame): A DataFrame containing company information such as 
+            symbol, companyName, currency, exchange, industry, and sector.
+            ratios (pd.DataFrame): A DataFrame containing relevant data from the 
+            ratios sub-dictionary.
+        metrics (pd.DataFrame): A DataFrame containing relevant data from the 
+            metrics sub-dictionary.
+        is_ (pd.DataFrame): A DataFrame containing relevant data from the is 
+            sub-dictionary.
+        price (pd.DataFrame): A DataFrame containing daily price data for the 
+            company, filtered into quarters.
+        snp_500 (pd.DataFrame): A DataFrame containing daily price data for the 
+            S&P500 index, filtered into quarters.
+        final_data (pd.DataFrame): A DataFrame containing all the relevant data 
+            from info, ratios, metrics, is_, price, and snp_500 DataFrames combined.
+
+    Methods:
+        json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
+            Converts JSON data to a pandas DataFrame.
+        
+        create_df_index(df: pd.DataFrame) -> pd.Index:
+            Creates a pandas Index for the given DataFrame.
+        
+        create_period_start_date_feature(date_string_array: np.array) -> List[str]:
+            Creates a period_start_date feature for the given date string array.
+        
+        pasrse_data_dictionary():
+            Parses the data dictionary.
+        
+        parse_info() -> pd.DataFrame:
+            Parses the info sub-dictionary to return a DataFrame with relevant 
+            company information.
+        
+        parse_ratios() -> pd.DataFrame:
+            Parses the ratios sub-dictionary to return a DataFrame with relevant 
+            data and period_start_date.
+        
+        parse_metrics() -> pd.DataFrame:
+            Parses the metrics sub-dictionary to return a DataFrame with relevant
+            data and period_start_date.
+        
+        parse_income_statement() -> pd.DataFrame:
+            Parses the is sub-dictionary to return a DataFrame with relevant data 
+            and period_start_date.
+        
+        parse_price() -> pd.DataFrame:
+            Parses the price sub-dictionary to return a DataFrame containing daily 
+            price data for the company.
+        
+        filter_dataframes() -> None:
+            Filters all DataFrames to include only common indices.
+        
+        load_snp_500() -> pd.DataFrame:
+            Loads and returns daily price data for the S&P500 index.
+        
+        filter_daily_into_quarters(df: pd.DataFrame, tag: str='stock') -> pd.DataFrame:
+            Filters the given DataFrame into quarters and returns a new DataFrame with 
+            stock price averages, highs, and lows for each quarter.
+        
+        create_date_objects_from_strings(date_string_array: np.array) -> np.array:
+            Converts the given date string array to an array of date objects.
+        
+        create_date_objects_from_pd_timestamps(timestamp_array) -> np.array:
+            Converts the given pandas timestamp array to an array of date objects.
+        
+        calculate_PE_ratios() -> None:
+            Calculates PE ratios for the company and updates the ratios DataFrame.
+        
+        combine_dataframes() -> pd.DataFrame:
+            Combines info, ratios, metrics, is, price, and snp_500 DataFrames into a 
+            single DataFrame.
+        
+        calculate_returns():
+            Calculates returns
 
     """
 
     def __init__(self, data_dictionary: Dict[str, List]):
+        """
+        Initializes a new instance of the DataParser class.
+
+        Args:
+            data_dictionary (Dict[str, List]): A dictionary containing data 
+            relevant to a single company.
+
+        Returns:
+            None
+        """
         self.data_dictionary = data_dictionary
         self.info = self.parse_info()
         self.ratios = self.parse_ratios()
         self.metrics = self.parse_metrics()
         self.is_ = self.parse_income_statement()
         self.price = self.filter_daily_into_quarters(self.parse_price())
-        self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), 'S&P500')
+        self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), "S&P500")
         self.filter_dataframes()
         self.calculate_PE_ratios()
         self.final_data = self.combine_dataframes()
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
+        """
+        Converts JSON data to a pandas DataFrame.
+
+        Args:
+            json_data (Dict[str, List]): A dictionary containing the JSON data to 
+            be converted.
+
+        Returns:
+            pd.DataFrame: A pandas DataFrame containing the converted data.
+        """
         return pd.DataFrame(json_data)
-    
+
     def create_df_index(self, df: pd.DataFrame) -> pd.Index:
-        ticker = self.info['symbol'][0]
+        """
+        Creates a pandas Index for the given DataFrame.
+
+        Args:
+            df (pd.DataFrame): A pandas DataFrame to create the index for.
+
+        Returns:
+            pd.Index: A pandas Index object.
+        """
+        ticker = self.info["symbol"][0]
         periods = df.period
-        years = df.date.apply(lambda x: x.split('-')[0])
-        index = ticker+'-'+periods+'-'+years
+        years = df.date.apply(lambda x: x.split("-")[0])
+        index = ticker + "-" + periods + "-" + years
         return pd.Index(index)
-    
+
     @staticmethod
     def create_period_start_date_feature(date_string_array) -> List[str]:
-        dates = np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
+        """
+        Creates a list of start dates for a given array of date strings.
+
+        Args:
+            date_string_array (Iterable[str]): An iterable of date strings in 
+            'YYYY-MM-DD' format.
+
+        Returns:
+            List[str]: A list of start dates, represented as strings in 
+            'YYYY-MM-DD' format.
+        """
+        dates = np.array(
+            [dt.date(*[int(i) for i in date.split("-")]) for date in date_string_array]
+        )
         start_dates = dates - dt.timedelta(91)
         return [str(date) for date in start_dates]
-        
 
     def pasrse_data_dictionary(self):
         pass
 
     def parse_info(self) -> pd.DataFrame:
-        json_data = self.data_dictionary['info']
-        cols = ['symbol', 'companyName', 'currency', 'exchange', 'industry', 'sector']
+        json_data = self.data_dictionary["info"]
+        cols = ["symbol", "companyName", "currency", "exchange", "industry", "sector"]
         df_data = self.json_to_dataframe(json_data)
         return df_data[cols]
-    
+
     def parse_ratios(self) -> pd.DataFrame:
-        '''Need to create period_start_date column as date-91 days'''
-        cols = features['ratios']+['start_date']
-        json_data = self.data_dictionary['ratios']
+        json_data = self.data_dictionary["ratios"]
         df_data = self.json_to_dataframe(json_data)
-        df_data['start_date'] = self.create_period_start_date_feature(df_data.date)
+        df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
         df_data.index = self.create_df_index(df_data)
+        cols = features["ratios"] + ["start_date"]
         return df_data[cols]
-    
+
     def parse_metrics(self) -> pd.DataFrame:
-        cols = features['metrics']+['start_date']
-        json_data = self.data_dictionary['metrics']
+        json_data = self.data_dictionary["metrics"]
         df_data = self.json_to_dataframe(json_data)
-        df_data['start_date'] = self.create_period_start_date_feature(df_data.date)
+        df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
         df_data.index = self.create_df_index(df_data)
+        cols = features["metrics"] + ["start_date"]
         return df_data[cols]
 
     def parse_income_statement(self) -> pd.DataFrame:
-        cols = features['is']+['start_date']
-        json_data = self.data_dictionary['is']
+        json_data = self.data_dictionary["is"]
         df_data = self.json_to_dataframe(json_data)
-        df_data['start_date'] = self.create_period_start_date_feature(df_data.date)
+        df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
         df_data.index = self.create_df_index(df_data)
+        cols = features["is"] + ["start_date"]
         return df_data[cols]
 
     def parse_price(self) -> pd.DataFrame:
-        data = self.data_dictionary['price'][0]
-        data['date'] = self.create_date_objects_from_pd_timestamps(data.index)
+        data = self.data_dictionary["price"][0]
+        data["date"] = self.create_date_objects_from_pd_timestamps(data.index)
         return data
-    
+
     def filter_dataframes(self) -> None:
+        """
+        Filters the instance's DataFrames to only include common indices.
+
+        Returns:
+            None
+        """
         common_idx = self.ratios.index
         common_idx = common_idx.intersection(self.metrics.index)
         common_idx = common_idx.intersection(self.is_.index)
@@ -120,15 +245,37 @@ class DataParser:
         assert self.ratios.index.equals(self.snp_500.index), failed_msg
 
     def load_snp_500(self):
-        path = Path.cwd()/\
-                'investment_predictions'/'data'/\
-                    'snp500_trading_data_1970_to_2023.parquet'
-        df =  pd.read_parquet(path)
-        df['date'] = self.create_date_objects_from_pd_timestamps(df.index)
+        """
+        Loads the S&P 500 trading data from a parquet file.
+
+        Returns:
+            pd.DataFrame: A pandas DataFrame containing the S&P 500 trading data.
+        """
+        path = (
+            Path.cwd()
+            / "investment_predictions"
+            / "data"
+            / "snp500_trading_data_1970_to_2023.parquet"
+        )
+        df = pd.read_parquet(path)
+        df["date"] = self.create_date_objects_from_pd_timestamps(df.index)
         return df
 
-    def filter_daily_into_quarters(self, df: pd.DataFrame, tag: str='stock') -> None:
-        start_date_objects = self.create_date_objects_from_strings(self.ratios.start_date)
+    def filter_daily_into_quarters(self, df: pd.DataFrame, tag: str = "stock") -> None:
+        """
+        Filters daily stock data into quarterly data.
+
+        Args:
+            df (pd.DataFrame): A pandas DataFrame containing daily stock data.
+            tag (str): A string representing the type of stock data being filtered 
+                (default 'stock').
+
+        Returns:
+            pd.DataFrame: A pandas DataFrame containing quarterly stock data.
+        """
+        start_date_objects = self.create_date_objects_from_strings(
+            self.ratios.start_date
+        )
         end_date_objects = self.create_date_objects_from_strings(self.ratios.date)
         working_index = self.ratios.index
 
@@ -136,42 +283,90 @@ class DataParser:
         filtered_index = []
         for start, end, idx in zip(start_date_objects, end_date_objects, working_index):
             try:
-                period_price = df[(df.date>=start) & (df.date<end)]
-                max_ = max(period_price['High'])
-                min_ = min(period_price['Low'])
-                close = period_price['Close'].mean()
+                period_price = df[(df.date >= start) & (df.date < end)]
+                max_ = max(period_price["High"])
+                min_ = min(period_price["Low"])
+                close = period_price["Close"].mean()
                 filtered_data.append([close, max_, min_])
                 filtered_index.append(idx)
             except ValueError:
                 continue
-        
-        new_df = pd.DataFrame(filtered_data, columns=[f'{tag}PriceAverage', 
-                                                      f'{tag}PriceHigh', 
-                                                      f'{tag}PriceLow'], 
-                                                      index=filtered_index)
+
+        new_df = pd.DataFrame(
+            filtered_data,
+            columns=[f"{tag}PriceAverage", f"{tag}PriceHigh", f"{tag}PriceLow"],
+            index=filtered_index,
+        )
         return new_df
 
     @staticmethod
     def create_date_objects_from_strings(date_string_array: np.array) -> np.array:
-        return np.array([dt.date(*[int(i) for i in date.split('-')]) for date in date_string_array])
+        """
+        Creates an array of date objects from an array of date strings.
+
+        Args:
+            date_string_array (np.array): A NumPy array of date strings in the format 
+            'YYYY-MM-DD'.
+
+        Returns:
+            np.array: A NumPy array of date objects.
+        """
+        return np.array(
+            [dt.date(*[int(i) for i in date.split("-")]) for date in date_string_array]
+        )
 
     @staticmethod
     def create_date_objects_from_pd_timestamps(timestamp_array) -> np.array:
-        return np.array([dt.date(*[int(i) for i in str(stamp).split()[0].split('-')]) for stamp in timestamp_array])
+        """
+        Creates an array of date objects from an array of pandas Timestamps.
+
+        Args:
+            timestamp_array (np.array): A NumPy array of pandas Timestamps.
+
+        Returns:
+            np.array: A NumPy array of date objects.
+        """
+        return np.array(
+            [
+                dt.date(*[int(i) for i in str(stamp).split()[0].split("-")])
+                for stamp in timestamp_array
+            ]
+        )
 
     def calculate_PE_ratios(self) -> None:
+        """
+        Calculates the PE ratios of the company and adds them as columns to the ratios 
+        DataFrame.
+
+        The PE ratios are calculated as the average, low, and high prices divided by 
+        four times the EPS.
+
+        Returns:
+            None.
+        """
         eps = self.is_.eps
-        self.ratios['PE_avg'] = self.price['stockPriceAverage']/(4*eps)
-        self.ratios['PE_low'] = self.price['stockPriceLow']/(4*eps)
-        self.ratios['PE_high'] = self.price['stockPriceHigh']/(4*eps)
+        self.ratios["PE_avg"] = self.price["stockPriceAverage"] / (4 * eps)
+        self.ratios["PE_low"] = self.price["stockPriceLow"] / (4 * eps)
+        self.ratios["PE_high"] = self.price["stockPriceHigh"] / (4 * eps)
 
     def combine_dataframes(self) -> pd.DataFrame:
-        to_drop = ['date', 'period']
+        """
+        Combines the parsed and filtered DataFrames for the company into a single 
+        DataFrame.
+
+        The method drops the 'date' and 'period' columns from the metrics and income 
+        statement DataFrames, joins all DataFrames on their common index, and returns 
+        the resulting DataFrame.
+
+        Returns:
+            pd.DataFrame: A pandas DataFrame containing the combined data for the 
+            company.
+        """
+        to_drop = ["date", "period"]
         self.metrics = self.metrics.drop(to_drop, axis=1)
         self.is_ = self.is_.drop(to_drop, axis=1)
         to_join = [self.ratios, self.metrics, self.is_, self.price, self.snp_500]
         return pd.concat(to_join, axis=1)
-    
+
     def calculate_returns(self):
         pass
-    

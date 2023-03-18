@@ -193,7 +193,7 @@ class DataScraper:
             if self.data_type == "company"
             else self.fmp_economic_requests
         )
-        if not self.ticker == '^GSPC':
+        if not self.ticker == "^GSPC":
             for string in request_list:
                 url = self.get_fmp_api_url(string)
                 response = self.make_fmp_api_requests(url)
