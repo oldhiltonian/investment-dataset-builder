@@ -115,6 +115,15 @@
       "period",
       "eps",
       "ebitdaratio"
+    ],
+
+    "price": [
+      "Open",
+      "High",
+      "Low",
+      "Close",
+      "Adj Close",
+      "Volume"
     ]
 
   }

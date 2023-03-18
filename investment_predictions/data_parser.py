@@ -220,7 +220,8 @@ class DataParser:
     def parse_price(self) -> pd.DataFrame:
         data = self.data_dictionary["price"][0]
         data["date"] = self.create_date_objects_from_pd_timestamps(data.index)
-        return data
+        cols = features['price'] + ["date"]
+        return data[cols]
 
     def filter_dataframes(self) -> None:
         """
