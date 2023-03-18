@@ -1,5 +1,6 @@
 ### TODO: Comment with docstrings
 ### TODO: Calculate returns and the associated unittest
+### TODO: create_period_start_date_feature unittest
 
 
 import pandas as pd
@@ -134,7 +135,7 @@ class DataParser:
         # self.ratios = self.parse_ratios()
         # self.metrics = self.parse_metrics()
         # self.is_ = self.parse_income_statement()
-        self.price = self.filter_daily_into_quarters(self.parse_price())
+        # self.price = self.filter_daily_into_quarters(self.parse_price())
         self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), "S&P500")
         self.filter_dataframes()
         self.calculate_PE_ratios()
@@ -190,22 +191,23 @@ class DataParser:
         return [str(date) for date in start_dates]
 
     def pasrse_data_dictionary(self, key: str):
-        assert key in ['info', 'ratios', 'metrics', 'is', 'price'], "invalid key"
-        if key != 'price':
-            json_data = self.data_dictionary[key]
-            df_data = self.json_to_dataframe(json_data)
-            if key != 'info':
-                df_data["start_date"] = \
-                    self.create_period_start_date_feature(df_data.date)
-                df_data.index = self.create_df_index(df_data)
-                cols = features[key] + ["start_date"]
-            else:
-                cols = features['info']
-        else:
-            df_data = self.data_dictionary[key]
+        assert key in self.data_dictionary.keys(), "invalid key"
+        json_data = self.data_dictionary[key]
+        df_data = self.json_to_dataframe(json_data)
+        cols = features[key]
+        
+        if key in ['ratios', 'metrics', 'is']:
+            df_data["start_date"] = \
+                self.create_period_start_date_feature(df_data.date)
+            df_data.index = self.create_df_index(df_data)
+            extra_cols = ['start_date']
+        elif key == 'price':
             df_data["date"] = self.create_date_objects_from_pd_timestamps(df_data.index)
-            cols = features['price'] + ["date"]
-        return df_data[cols]
+            extra_cols = ['date']
+        else:
+            extra_cols = []
+
+        return df_data[cols+extra_cols]
             
 
     def parse_info(self) -> pd.DataFrame:
