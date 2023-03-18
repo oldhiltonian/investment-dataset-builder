@@ -189,8 +189,8 @@ class DataParser:
 
     def parse_info(self) -> pd.DataFrame:
         json_data = self.data_dictionary["info"]
-        cols = ["symbol", "companyName", "currency", "exchange", "industry", "sector"]
         df_data = self.json_to_dataframe(json_data)
+        cols = features['info']
         return df_data[cols]
 
     def parse_ratios(self) -> pd.DataFrame:

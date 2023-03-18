@@ -1,5 +1,14 @@
 {
-    "ratios": [
+    "info":     [
+                "symbol", 
+                "companyName", 
+                "currency", 
+                "exchange", 
+                "industry", 
+                "sector"
+                ],
+  
+      "ratios": [
                 "date",
                 "period",  
                 "assetTurnover",
