@@ -17,30 +17,30 @@ with open(feature_path, "r") as f:
 
 class DataParser:
     """
-    This class is built to accept the DataScraper.data_dictionary ditionary, parse the 
+    This class is built to accept the DataScraper.data_dictionary dictionary, parse the 
     data and create a single DataFrame that represents the data for that company. 
 
     The dictionary passed as an argument contains data relevant to a single company, 
     and thus the returned DataFrame is specific to that single company. The current 
     DataScraper design should only be used with "company" as the data_type argument,
     and thus the only acceptable keys in the DataScraper.data_dictionary are 'info', 
-    'metrics', 'ratios', 'is' and, 'price'. When parsed, only relevant data is 
+    'metrics', 'ratios', 'is', and 'price'. When parsed, only relevant data is 
     passed back from each of the sub-dictionaries. The relevant data is defined in 
     the local features.json file that should be present in the same directory as 
-    this data_parser.py file. Duplicate features are not retured e.g.: 
+    this data_parser.py file. Duplicate features are not returned e.g.: 
     self.parse_metrics() does not return features that are already returned from 
     self.parse_ratios().
 
     Args:
-    data_dictionary (Dict[str, List]): A dictionary containing data relevant to a 
-    single company.
+        data_dictionary (Dict[str, List]): A dictionary containing data relevant to a 
+            single company.
 
     Attributes:
         data_dictionary (Dict[str, List]): A dictionary containing data relevant 
             to a single company.
         info (pd.DataFrame): A DataFrame containing company information such as 
             symbol, companyName, currency, exchange, industry, and sector.
-            ratios (pd.DataFrame): A DataFrame containing relevant data from the 
+        ratios (pd.DataFrame): A DataFrame containing relevant data from the 
             ratios sub-dictionary.
         metrics (pd.DataFrame): A DataFrame containing relevant data from the 
             metrics sub-dictionary.
@@ -52,6 +52,7 @@ class DataParser:
             S&P500 index, filtered into quarters.
         final_data (pd.DataFrame): A DataFrame containing all the relevant data 
             from info, ratios, metrics, is_, price, and snp_500 DataFrames combined.
+        returns (pd.DataFrame): A DataFrame containing calculated relative returns.
 
     Methods:
         json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
@@ -63,7 +64,7 @@ class DataParser:
         create_period_start_date_feature(date_string_array: np.array) -> List[str]:
             Creates a period_start_date feature for the given date string array.
         
-        pasrse_data_dictionary():
+        parse_data_dictionary():
             Parses the data dictionary.
         
         parse_info() -> pd.DataFrame:
@@ -93,9 +94,10 @@ class DataParser:
             Loads and returns daily price data for the S&P500 index.
         
         filter_daily_into_quarters(df: pd.DataFrame, tag: str='stock') -> pd.DataFrame:
-            Filters the given DataFrame into quarters and returns a new DataFrame with 
-            stock price averages, highs, and lows for each quarter.
-        
+        Filters the given DataFrame containing daily price data into quarters 
+        and returns a new DataFrame with stock price averages, highs, and lows 
+        for each quarter.
+    
         create_date_objects_from_strings(date_string_array: np.array) -> np.array:
             Converts the given date string array to an array of date objects.
         
@@ -109,8 +111,15 @@ class DataParser:
             Combines info, ratios, metrics, is, price, and snp_500 DataFrames into a 
             single DataFrame.
         
-        calculate_returns():
-            Calculates returns
+        calculate_internal_returns() -> List:
+            Calculates returns for the company's stock price and the S&P 500 index,
+            with a lag of 1, 2, 3, or 4 quarters, and stores them in the respective
+            DataFrames.
+        
+        calculate_relative_returns() -> pd.DataFrame:
+            Calculates the returns of the company's stock price relative to the 
+            S&P 500 index returns, with a lag of 1, 2, 3, or 4 quarters, and 
+            returns a DataFrame containing these values.
 
     """
 
