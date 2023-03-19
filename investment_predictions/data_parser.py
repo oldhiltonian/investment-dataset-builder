@@ -372,7 +372,12 @@ class DataParser:
         to_drop = ["date", "period"]
         self.metrics = self.metrics.drop(to_drop, axis=1)
         self.is_ = self.is_.drop(to_drop, axis=1)
-        to_join = [self.ratios, self.metrics, self.is_, self.price, self.snp_500]
+        to_join = [self.ratios, 
+                   self.metrics, 
+                   self.is_, 
+                   self.price, 
+                   self.snp_500,
+                   self.returns]
         return pd.concat(to_join, axis=1)
 
     def calculate_returns_from_series(self, price: pd.DataFrame, interval: int=1) -> List:
