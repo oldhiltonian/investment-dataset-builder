@@ -78,7 +78,22 @@ class TestDataParser(unittest.TestCase):
             self.assertEqual(result_index.equals(expected_index), True)
 
     def test_create_period_start_date_feature(self):
-        pass
+        """
+        Test the `create_period_start_date_feature` method of a parser instance.
+
+        This method should return a list of strings with the date corresponding to the start of the quarter that each input date belongs to.
+
+        Args:
+            self: The parser instance to test.
+
+        Returns:
+            None.
+        """
+        for instance in parser_instance_generator():
+            strings = ['2020-10-11', '2012-01-01', '1999-12-31']
+            expected = ['2020-07-12', '2011-10-02', '1999-10-01']
+            result = instance.create_period_start_date_feature(strings)
+            self.assertEqual(result, expected)
 
     def test_parse_info(self):
         """Test the parse_info method"""
