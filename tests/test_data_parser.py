@@ -8,6 +8,7 @@ import requests
 import pandas as pd
 import datetime as dt
 import json
+import numpy as np
 
 
 sys.path.append("..")
@@ -29,7 +30,7 @@ def parser_instance_generator():
         DataScraper: An instance of the DataScraper class.
 
     """
-    tickers = ["AAPL", "NVDA", "MSFT", "JXN"]
+    tickers = ["AAPL", "NVDA", "MSFT", "XOM"]
     periods = ["annual", "quarter"]
     data_types = ["company"]
     for ticker, period, data_type in itertools.product(tickers, periods, data_types):
@@ -362,5 +363,65 @@ class TestDataParser(unittest.TestCase):
             result = instance.combine_dataframes()
             self.assertEqual(result.equals(expected), True)
 
-    def test_calculate_returns(self):
-        pass
+    def test_calculate_returns_from_series(self):
+        for instance in parser_instance_generator():
+            price = [5,4,3,2,1]
+            expected = [np.nan, 1.250000, 1.3333333333333333, 1.5, 2.]
+            result = instance.calculate_returns_from_series(price)
+            self.assertEqual(expected, result)
+
+
+
+    def test_calculate_internal_returns(self):
+        for instance in parser_instance_generator():
+            instance.price = pd.DataFrame([5,4,3,2,1], columns = ['stockPriceAverage'])
+            instance.snp_500 = pd.DataFrame([2,4,6,8,10], columns=['S&P500PriceAverage'])
+            instance.calculate_internal_returns()
+            expected_price =  pd.DataFrame({
+                'stockPriceAverage': [5,4,3,2,1],
+                'stockPriceRatio_1Q': [np.nan, 1.250000, 1.33333, 1.5, 2.],
+                'stockPriceRatio_2Q': [np.nan, np.nan, 1.66667, 2., 3.],
+                'stockPriceRatio_3Q': [np.nan, np.nan, np.nan, 2.5, 4.],
+                'stockPriceRatio_4Q': [np.nan, np.nan, np.nan, np.nan, 5.]
+            })
+            pd.testing.assert_frame_equal(expected_price, instance.price)
+            
+            expected_snp = pd.DataFrame({
+                'S&P500PriceAverage': [2,4,6,8,10],
+                'snpPriceRatio_1Q': [np.nan, 0.5, 0.66667, 0.75, 0.8],
+                'snpPriceRatio_2Q': [np.nan, np.nan, 0.33333, 0.5, 0.6],
+                'snpPriceRatio_3Q': [np.nan, np.nan, np.nan, 0.25, 0.4],
+                'snpPriceRatio_4Q': [np.nan, np.nan, np.nan, np.nan, 0.2]
+            })
+            pd.testing.assert_frame_equal(expected_snp, instance.snp_500)
+
+
+    def test_calculate_relative_returns(self):
+        for instance in parser_instance_generator():
+            instance.ratios = pd.DataFrame(index=pd.RangeIndex(0,5))
+            instance.price = pd.DataFrame({
+                'stockPriceAverage': [5,4,3,2,1],
+                'stockPriceRatio_1Q': [np.nan, 1.250000, 1.33333, 1.5, 2.],
+                'stockPriceRatio_2Q': [np.nan, np.nan, 1.66667, 2., 3.],
+                'stockPriceRatio_3Q': [np.nan, np.nan, np.nan, 2.5, 4.],
+                'stockPriceRatio_4Q': [np.nan, np.nan, np.nan, np.nan, 5.]
+            })
+            instance.snp_500 = pd.DataFrame({
+                'S&P500PriceAverage': [2,4,6,8,10],
+                'snpPriceRatio_1Q': [np.nan, 0.5, 0.66667, 0.75, 0.8],
+                'snpPriceRatio_2Q': [np.nan, np.nan, 0.33333, 0.5, 0.6],
+                'snpPriceRatio_3Q': [np.nan, np.nan, np.nan, 0.25, 0.4],
+                'snpPriceRatio_4Q': [np.nan, np.nan, np.nan, np.nan, 0.2]
+            })
+            expected = pd.DataFrame({
+
+                'priceRatioRelativeToS&P_1Q': [np.nan, 2.5, 2., 2., 2.5],
+                'priceRatioRelativeToS&P_2Q': [np.nan, np.nan, 5.000060000600006, 4., 5.],
+                'priceRatioRelativeToS&P_3Q': [np.nan, np.nan, np.nan, 10., 10.],
+                'priceRatioRelativeToS&P_4Q': [np.nan, np.nan, np.nan, np.nan, 25.]
+            })
+
+            result = instance.calculate_relative_returns()
+            pd.testing.assert_frame_equal(result, expected)
+
+

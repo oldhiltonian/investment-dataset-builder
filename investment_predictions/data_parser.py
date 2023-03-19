@@ -131,15 +131,13 @@ class DataParser:
         self.metrics = self.pasrse_data_dictionary('metrics')
         self.is_ = self.pasrse_data_dictionary('is')
         self.price = self.filter_daily_into_quarters(self.pasrse_data_dictionary('price'))
-        # self.info = self.parse_info()
-        # self.ratios = self.parse_ratios()
-        # self.metrics = self.parse_metrics()
-        # self.is_ = self.parse_income_statement()
-        # self.price = self.filter_daily_into_quarters(self.parse_price())
         self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), "S&P500")
         self.filter_dataframes()
         self.calculate_PE_ratios()
+        self.calculate_internal_returns()
+        self.returns = self.calculate_relative_returns()
         self.final_data = self.combine_dataframes()
+
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
@@ -191,6 +189,19 @@ class DataParser:
         return [str(date) for date in start_dates]
 
     def pasrse_data_dictionary(self, key: str):
+        """
+        Parse data from the data dictionary based on a given key and return a DataFrame with
+        the relevant columns.
+
+        Args:
+            key (str): The key of the data to be parsed from the data dictionary.
+
+        Returns:
+            pd.DataFrame: A DataFrame with the relevant columns for the given key.
+
+        Raises:
+            AssertionError: If the key is not in the data dictionary.
+        """
         assert key in self.data_dictionary.keys(), "invalid key"
         json_data = self.data_dictionary[key]
         df_data = self.json_to_dataframe(json_data)
@@ -208,43 +219,6 @@ class DataParser:
             extra_cols = []
 
         return df_data[cols+extra_cols]
-            
-
-    def parse_info(self) -> pd.DataFrame:
-        json_data = self.data_dictionary["info"]
-        df_data = self.json_to_dataframe(json_data)
-        cols = features['info']
-        return df_data[cols]
-
-    def parse_ratios(self) -> pd.DataFrame:
-        json_data = self.data_dictionary["ratios"]
-        df_data = self.json_to_dataframe(json_data)
-        df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
-        df_data.index = self.create_df_index(df_data)
-        cols = features["ratios"] + ["start_date"]
-        return df_data[cols]
-
-    def parse_metrics(self) -> pd.DataFrame:
-        json_data = self.data_dictionary["metrics"]
-        df_data = self.json_to_dataframe(json_data)
-        df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
-        df_data.index = self.create_df_index(df_data)
-        cols = features["metrics"] + ["start_date"]
-        return df_data[cols]
-
-    def parse_income_statement(self) -> pd.DataFrame:
-        json_data = self.data_dictionary["is"]
-        df_data = self.json_to_dataframe(json_data)
-        df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
-        df_data.index = self.create_df_index(df_data)
-        cols = features["is"] + ["start_date"]
-        return df_data[cols]
-
-    def parse_price(self) -> pd.DataFrame:
-        df_data = self.data_dictionary["price"]
-        df_data["date"] = self.create_date_objects_from_pd_timestamps(df_data.index)
-        cols = features['price'] + ["date"]
-        return df_data[cols]
 
     def filter_dataframes(self) -> None:
         """
@@ -392,5 +366,63 @@ class DataParser:
         to_join = [self.ratios, self.metrics, self.is_, self.price, self.snp_500]
         return pd.concat(to_join, axis=1)
 
-    def calculate_returns(self):
-        pass
+    def calculate_returns_from_series(self, price: pd.DataFrame, interval: int=1) -> List:
+        """
+        Calculate the returns for the given price DataFrame over a specified interval.
+        Assumes that the most recent price is at the top of the df.
+
+        Args:
+            price (pd.DataFrame): DataFrame containing the historical prices.
+            interval (int, optional): The number of time intervals to calculate returns over.
+                Defaults to 1.
+
+        Returns:
+            List: A list of returns calculated for the given interval, with NaN values at the end.
+
+        Raises:
+            TypeError: If price is not a pandas DataFrame.
+            ValueError: If interval is less than 1.
+        """
+        interval = int(interval)
+        price_series = list(reversed(price))
+        returns = []
+        for idx, price in enumerate(price_series[: -interval]):
+            returns.append(price_series[idx+interval]/price)
+        for _ in range(interval):
+            returns.append(np.nan)
+        return list(reversed(returns))
+    
+    def calculate_internal_returns(self) -> List:
+        """Calculates internal returns over 1, 2, 3, and 4 quarters by calculating 
+        the ratio of the average stock prices for those quarters. 
+        
+        Returns:
+            None
+        """
+        for i in [1, 2, 3, 4]:
+            self.price[f'stockPriceRatio_{i}Q'] = self.calculate_returns_from_series(
+                self.price['stockPriceAverage'], i
+            )
+            self.snp_500[f'snpPriceRatio_{i}Q'] = self.calculate_returns_from_series(
+                self.snp_500['S&P500PriceAverage'], i
+            )
+            
+    def calculate_relative_returns(self):
+        """Calculates the relative returns of the stock compared to the S&P500 
+            over 1Q, 2Q, 3Q, and 4Q periods.
+    
+        Returns:
+            relative_returns_df: pd.DataFrame
+                A DataFrame containing the relative returns of the stock compared 
+                to the S&P 500 over 1Q, 2Q, 3Q, and 4Q periods.
+        """
+        relative_returns_df = pd.DataFrame(index=self.ratios.index)
+        for i in [1, 2, 3, 4]:
+            header = f"priceRatioRelativeToS&P_{i}Q"
+            stock_return = self.price[f'stockPriceRatio_{i}Q']
+            snp_return = self.snp_500[f'snpPriceRatio_{i}Q']
+            relative_return = stock_return/snp_return
+            relative_returns_df[header] = relative_return
+        return relative_returns_df
+
+
