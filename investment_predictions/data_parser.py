@@ -1,6 +1,5 @@
-### TODO: Comment with docstrings
-### TODO: Calculate returns and the associated unittest
-### TODO: create_period_start_date_feature unittest
+### TODO: Do some data validation: column dtypes, ensure all cells are numeric etc
+### TODO: Create the dataset builder class based on tickers from fmp
 
 
 import pandas as pd
