@@ -61,7 +61,7 @@ class DataParser:
             Creates a pandas Index for the given DataFrame.
         
         create_period_start_date_feature(date_string_array: np.array) -> List[str]:
-            Creates a period_start_date feature for the given date string array.
+            Creates a start_date feature for the given date string array.
         
         parse_data_dictionary():
             Parses the data dictionary.
