@@ -1,5 +1,5 @@
 import sys
-from investment_predictions import DataScraper, DataParser
+from investment_predictions import DataScraper, DataParser, DatasetBuilder
 import unittest
 from unittest.mock import Mock, patch
 import itertools
@@ -19,3 +19,6 @@ with open(key_path) as file:
 feature_path = Path.cwd() / "investment_predictions" / "features.json"
 with open(feature_path, "r") as f:
     features = json.load(f)
+
+
+
