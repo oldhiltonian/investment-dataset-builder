@@ -22,6 +22,8 @@ class DatasetBuilder:
         self.exchanges = exchanges
         self.possible_exchange_names = exchange_names['exchange_names']
         self.raw_data = self.fetch_raw_stock_ticker_data()
+
+    def build(self):
         self.dataset = self.build_dataset()
 
     def get_fmp_api_url(self) -> str:
@@ -30,9 +32,9 @@ class DatasetBuilder:
     
     @staticmethod
     def make_stock_ticker_api_request(url: str) -> requests.Response:
-        data = requests.get(url)
-        assert data.status_code == 200, f'API request failed: <{data.status_code}>'
-        return data
+        response = requests.get(url)
+        assert response.status_code == 200, f'API request failed: <{response.status_code}>'
+        return response
     
     @staticmethod
     def response_to_json(response_object) -> List[Dict]:
