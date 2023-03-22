@@ -21,9 +21,12 @@ class DatasetBuilder:
     def __init__(self, exchanges: List=None):
         self.exchanges = exchanges
         self.possible_exchange_names = exchange_names['exchange_names']
-        self.raw_data = self.fetch_raw_stock_ticker_data()
+        self.raw_data = None
+        self.dataset = None
+        
 
     def build(self):
+        self.raw_data = self.fetch_raw_stock_ticker_data()
         self.dataset = self.build_dataset()
 
     def get_fmp_api_url(self) -> str:
@@ -51,34 +54,40 @@ class DatasetBuilder:
             assert str(item) in self.possible_exchange_names
         self.exchanges = new_exchanges
 
+    def check_valid_security(self, dct: Dict):
+        if dct.get('type') == 'stock':
+            if dct.get('exchange') in self.exchanges:
+                return True
+        return False
+
     def build_dataset(self) -> pd.DataFrame:
         self._failed_tickers = list()
-        trigger = None
+        self._successful_tickers = list()
+        total_df = None
         for dct in self.raw_data:
             # We only want to consider stocks
-            if dct['type'] != 'stock':
+            is_valid = self.check_valid_security(dct)
+            if not is_valid:
                 continue
-            
+    
             ticker = dct['symbol']
             
-            if dct['exchange'] in self.exchanges:
-                if not trigger:
-                    try:
-                        initial = DataParser(DataScraper(ticker, api_key).data_dictionary)
-                        total_df = initial.final_data
-                        trigger = True
-                    except AssertionError:
-                        self._failed_tickers.append(ticker)
-                        continue
-                else:
-                    try:
-                        new_parser = DataParser(DataScraper(ticker, api_key).data_dictionary)
-                        new_df = new_parser.final_data
-                        total_df = pd.concat([total_df, new_df], axis=0)
-                    except:
-                        self._failed_tickers.append(ticker)
-                        continue
+            try:
+                scraper = DataScraper(ticker, api_key)
+                parser = DataParser(scraper.data_dictionary)
+            except AssertionError:
+                self._failed_tickers.append(ticker)
+            
+            df = parser.final_data
+            if total_df is None:
+                    total_df = df
+            else:
+                total_df = pd.concat([total_df, df], axis=0)
+            self._successful_tickers.append(ticker)
+        
         return total_df
+
+
                     
     def data_validation(self):
         # Drop all instances where the priceRatioToSNP is nan
