@@ -24,7 +24,6 @@ class DatasetBuilder:
         self.raw_data = None
         self.dataset = None
         
-
     def build(self):
         self.raw_data = self.fetch_raw_stock_ticker_data()
         self.dataset = self.build_dataset()
@@ -86,8 +85,6 @@ class DatasetBuilder:
             self._successful_tickers.append(ticker)
         
         return total_df
-
-
                     
     def data_validation(self):
         # Drop all instances where the priceRatioToSNP is nan
