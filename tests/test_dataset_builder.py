@@ -7,6 +7,7 @@ from pathlib import Path
 import requests
 import pandas as pd
 import datetime as dt
+import numpy as np
 import json
 sys.path.append("..")
 
@@ -43,11 +44,33 @@ class TestDatasetBuilder(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 instance.make_stock_ticker_api_request(url)
 
+    def test_response_to_json(self):
+        toy_dict = {"symbol": "AAPL", "Name": "Apple Inc"}
+        instance = DatasetBuilder()
+        response = Mock()
+        response.json = Mock(return_value=toy_dict)
+        result = instance.response_to_json(response)
+        self.assertEqual(result, toy_dict)
+        response.json.assert_called_once()
+
     def test_fetch_raw_stock_ticker_data(self):
-        pass
+        '''This function is not tested explicitly as it is a composition#
+            of three other functions which are all unittested above'''
 
     def test_set_exchanges(self):
-        pass
+        instance = DatasetBuilder()
+        exchange_list = [
+            ['AMEX', 'BSE', 'Athens'],
+            ['Fukuoka', 'KOSDAQ', 'Lisbon'],
+            ['NASDAQ', 'NSE', 'Prague']
+        ]
+        for exchanges in exchange_list:
+            instance.set_exchanges(exchanges)
+            self.assertEqual(exchanges, instance.exchanges)
+        
+        for item in [np.nan, '', 'abc']:
+            with self.assertRaises(AssertionError):
+                instance.set_exchanges([item])
 
     def test_build_dataset(self):
         pass
