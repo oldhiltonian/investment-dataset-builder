@@ -27,6 +27,7 @@ class DatasetBuilder:
     def build(self):
         self.raw_data = self.fetch_raw_stock_ticker_data()
         self.dataset = self.build_dataset()
+        self.data = self.validate_data(self.dataset)
 
     def get_fmp_api_url(self) -> str:
         url = f'https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}'
@@ -86,12 +87,12 @@ class DatasetBuilder:
         
         return total_df
                     
-    def data_validation(self):
-        # Drop all instances where the priceRatioToSNP is nan
-        # Drop date, period, start date
-        # zero all values that are nan
-        # ensure all cells are float
-        pass
+    def validate_data_is_float64(self, df):
+        df = df.drop(['start_date', 'period', 'date'], axis=1)
+        df = df.astype('float64')
+        for col in df.columns:
+            assert df[col].dtype == 'float64'
+        return df
 
     
 
