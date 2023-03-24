@@ -58,7 +58,7 @@ class DatasetBuilder:
 
     """
 
-    def __init__(self, exchanges: List=None):
+    def __init__(self, exchanges: List=['New York Stock Exchange']):
         """
         Constructs all the necessary attributes for the DatasetBuilder object.
 

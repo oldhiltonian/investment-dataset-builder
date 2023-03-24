@@ -239,7 +239,7 @@ class DataParser:
         common_idx = common_idx.intersection(self.metrics.index)
         common_idx = common_idx.intersection(self.is_.index)
         common_idx = common_idx.intersection(self.price.index)
-        self.ratios = self.ratios.loc[common_idx]
+        assert len(common_idx) >= 1, "No common indecies"
         self.metrics = self.metrics.loc[common_idx]
         self.is_ = self.is_.loc[common_idx]
         self.price = self.price.loc[common_idx]
