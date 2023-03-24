@@ -27,3 +27,21 @@ class TestDatasetBuilder(unittest.TestCase):
         result = instance.get_fmp_api_url()
         self.assertEqual(result, expected)
         self.assertNotEqual(expected, 'test')
+
+    def test_response_to_json(self):
+        pass
+
+    def test_fetch_raw_stock_ticker_data(self):
+        pass
+
+    def test_set_exchanges(self):
+        pass
+
+    def test_check_valid_security(self):
+        pass
+
+    def test_build_dataset(self):
+        pass
+
+    def test_validate_Data_is_float64(self):
+        pass

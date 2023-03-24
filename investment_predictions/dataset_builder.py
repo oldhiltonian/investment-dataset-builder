@@ -14,20 +14,20 @@ with open(key_path) as file:
 
 exchange_name_path = Path.cwd() / "investment_predictions" / "exchange_names.json"
 with open(exchange_name_path, "r") as f:
-    exchange_names = json.load(f)
+    exchange_names_json = json.load(f)
 
 
 class DatasetBuilder:
     def __init__(self, exchanges: List=None):
         self.exchanges = exchanges
-        self.possible_exchange_names = exchange_names['exchange_names']
+        self.possible_exchange_names = exchange_names_json['exchange_names']
         self.raw_data = None
         self.dataset = None
         
     def build(self):
         self.raw_data = self.fetch_raw_stock_ticker_data()
         self.dataset = self.build_dataset()
-        self.data = self.validate_data(self.dataset)
+        self.data = self.validate_data_is_float64(self.dataset)
 
     def get_fmp_api_url(self) -> str:
         url = f'https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}'
