@@ -406,20 +406,28 @@ class DataParser:
         return list(reversed(returns))
     
     def calculate_internal_returns(self) -> List:
-        """Calculates internal returns over 1, 2, 3, and 4 quarters by calculating 
+        """
+        Calculates internal returns over 1, 2, 3, and 4 quarters by calculating 
         the ratio of the average stock prices for those quarters. 
         
         Returns:
             None
         """
         for i in [1, 2, 3, 4]:
-            self.price[f'stockPriceRatio_{i}Q'] = self.calculate_returns_from_series(
-                self.price['stockPriceAverage'], i
-            )
-            self.snp_500[f'snpPriceRatio_{i}Q'] = self.calculate_returns_from_series(
-                self.snp_500['S&P500PriceAverage'], i
-            )
-            
+            try:
+                self.price[f'stockPriceRatio_{i}Q'] = self.calculate_returns_from_series(
+                    self.price['stockPriceAverage'], i
+                )
+                self.snp_500[f'snpPriceRatio_{i}Q'] = self.calculate_returns_from_series(
+                    self.snp_500['S&P500PriceAverage'], i
+                )
+            except ValueError:
+                len_df = len(self.ratios)
+                nan_array = len_df*[np.nan]
+                self.price[f'stockPriceRatio_{i}Q'] = nan_array
+                self.snp_500[f'snpPriceRatio_{i}Q'] = nan_array
+                continue
+
     def calculate_relative_returns(self):
         """Calculates the relative returns of the stock compared to the S&P500 
             over 1Q, 2Q, 3Q, and 4Q periods.
