@@ -1,7 +1,3 @@
-### TODO: Do some data validation: column dtypes, ensure all cells are numeric etc
-### TODO: Create the dataset builder class based on tickers from fmp
-
-
 import pandas as pd
 from typing import Dict, List, Tuple
 import json

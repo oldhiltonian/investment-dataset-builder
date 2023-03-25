@@ -72,10 +72,39 @@ class TestDatasetBuilder(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 instance.set_exchanges([item])
 
+    def test_is_valid_security(self):
+        instance = generate_class_instance()
+        instance.set_exchanges(['Helsinki', 'Iceland', 'Milan', 'NSE'])
+        good_dicts = [
+            {'type': 'stock', 'exchange': 'Helsinki'},
+            {'type': 'stock', 'exchange': 'Iceland'},
+            {'type': 'stock', 'exchange': 'Milan'},
+            {'type': 'stock', 'exchange': 'NSE'}
+        ]
+        bad_dicts = [
+            {'type': 'notstock', 'exchange': 'Helsinki'},
+            {'type': '', 'exchange': 'Iceland'},
+            {'type': 'STOCK', 'exchange': 'Milan'},
+            {'type': 'Stock', 'exchange': 'NSE'},
+            {'type': 'stock', 'exchange': 'Helsink'},
+            {'type': 'stock', 'exchange': 'Icelnd'},
+            {'type': 'stock', 'exchange': 'Mian'},
+            {'type': 'stock', 'exchange': 'NS'}
+        ]
+
+        for dct in good_dicts:
+            result = instance.check_valid_security(dct)
+            self.assertEqual(result, True)
+        
+        for dct in bad_dicts:
+            result = instance.check_valid_security(dct)
+            self.assertEqual(result, False)
+
+
     def test_build_dataset(self):
+        'Need to build this'
         pass
 
-    def test_data_validation(self):
-        pass
+
 
     

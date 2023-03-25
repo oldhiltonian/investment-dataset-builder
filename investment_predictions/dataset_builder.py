@@ -123,7 +123,7 @@ class DatasetBuilder:
         """
         return response_object.json()
     
-    def fetch_raw_stock_ticker_data(self):
+    def fetch_raw_stock_ticker_data(self) -> List[Dict]:
         """
         Fetches raw stock ticker data from API.
 
@@ -173,16 +173,20 @@ class DatasetBuilder:
             pd.DataFrame
                 a pandas dataframe containing the built financial dataset
         """
+        ### TODO: add connectivity error catching
+        # setup
         total_length = len(self.raw_data)
         self._failed_tickers = list()
         self._successful_tickers = list()
         total_df = None
+
+        # main loop
         for idx, dct in enumerate(self.raw_data):
             # We only want to consider stocks
             is_valid = self.check_valid_security(dct)
             if not is_valid:
                 continue
-    
+            
             ticker = dct['symbol']
             print(ticker)
             print(f'item: {idx}/{total_length}')
@@ -199,6 +203,7 @@ class DatasetBuilder:
                     total_df = df
             else:
                 total_df = pd.concat([total_df, df], axis=0)
+            
             self._successful_tickers.append(ticker)
             clear_output()
         
@@ -207,16 +212,6 @@ class DatasetBuilder:
     def clean_up_dataframe(df):
         return df.drop(['start_date'], axis=1)
 
-    # def validate_data_is_float64(self, df):
-    #     ''' eed to redisgn this'''
-    #     df = df.astype('float64')
-    #     for col in df.columns:
-    #         if df[col].dtype != 'float64':
-    #             try:
-    #                 df[col] = df[col].astype('float64')
-    #             except:
-    #                 continue
-    #     return df
 
     
 
