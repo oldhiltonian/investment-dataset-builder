@@ -5,7 +5,7 @@ from pathlib import Path
 import datetime as dt
 import numpy as np
 
-feature_path = Path.cwd() / "investment_predictions" / "features.json"
+feature_path = Path.cwd() / "investment_dataset_builder" / "features.json"
 with open(feature_path, "r") as f:
     features = json.load(f)
 
@@ -130,18 +130,19 @@ class DataParser:
             None
         """
         self.data_dictionary = data_dictionary
-        self.info = self.pasrse_data_dictionary('info')
-        self.ratios = self.pasrse_data_dictionary('ratios')
-        self.metrics = self.pasrse_data_dictionary('metrics')
-        self.is_ = self.pasrse_data_dictionary('is')
-        self.price = self.filter_daily_into_quarters(self.pasrse_data_dictionary('price'))
+        self.info = self.pasrse_data_dictionary("info")
+        self.ratios = self.pasrse_data_dictionary("ratios")
+        self.metrics = self.pasrse_data_dictionary("metrics")
+        self.is_ = self.pasrse_data_dictionary("is")
+        self.price = self.filter_daily_into_quarters(
+            self.pasrse_data_dictionary("price")
+        )
         self.snp_500 = self.filter_daily_into_quarters(self.load_snp_500(), "S&P500")
         self.filter_dataframes()
         self.calculate_PE_ratios()
         self.calculate_internal_returns()
         self.returns = self.calculate_relative_returns()
         self.final_data = self.combine_dataframes()
-
 
     @staticmethod
     def json_to_dataframe(json_data: Dict[str, List]) -> pd.DataFrame:
@@ -210,19 +211,18 @@ class DataParser:
         json_data = self.data_dictionary[key]
         df_data = self.json_to_dataframe(json_data)
         cols = features[key]
-        
-        if key in ['ratios', 'metrics', 'is']:
-            df_data["start_date"] = \
-                self.create_period_start_date_feature(df_data.date)
+
+        if key in ["ratios", "metrics", "is"]:
+            df_data["start_date"] = self.create_period_start_date_feature(df_data.date)
             df_data.index = self.create_df_index(df_data)
-            extra_cols = ['start_date']
-        elif key == 'price':
+            extra_cols = ["start_date"]
+        elif key == "price":
             df_data["date"] = self.create_date_objects_from_pd_timestamps(df_data.index)
-            extra_cols = ['date']
+            extra_cols = ["date"]
         else:
             extra_cols = []
 
-        return df_data[cols+extra_cols]
+        return df_data[cols + extra_cols]
 
     def filter_dataframes(self) -> None:
         """
@@ -256,7 +256,7 @@ class DataParser:
         """
         path = (
             Path.cwd()
-            / "investment_predictions"
+            / "investment_dataset_builder"
             / "config_data"
             / "snp500_trading_data_1970_to_2023.parquet"
         )
@@ -368,15 +368,19 @@ class DataParser:
         to_drop = ["date", "period"]
         self.metrics = self.metrics.drop(to_drop, axis=1)
         self.is_ = self.is_.drop(to_drop, axis=1)
-        to_join = [self.ratios, 
-                   self.metrics, 
-                   self.is_, 
-                   self.price, 
-                   self.snp_500,
-                   self.returns]
+        to_join = [
+            self.ratios,
+            self.metrics,
+            self.is_,
+            self.price,
+            self.snp_500,
+            self.returns,
+        ]
         return pd.concat(to_join, axis=1)
 
-    def calculate_returns_from_series(self, price: pd.DataFrame, interval: int=1) -> List:
+    def calculate_returns_from_series(
+        self, price: pd.DataFrame, interval: int = 1
+    ) -> List:
         """
         Calculate the returns for the given price DataFrame over a specified interval.
         Assumes that the most recent price is at the top of the df.
@@ -387,7 +391,8 @@ class DataParser:
                 Defaults to 1.
 
         Returns:
-            List: A list of returns calculated for the given interval, with NaN values at the end.
+            List: A list of returns calculated for the given interval, with NaN 
+                    values at the end.
 
         Raises:
             TypeError: If price is not a pandas DataFrame.
@@ -396,12 +401,12 @@ class DataParser:
         interval = int(interval)
         price_series = list(reversed(price))
         returns = []
-        for idx, price in enumerate(price_series[: -interval]):
-            returns.append(price_series[idx+interval]/price)
+        for idx, price in enumerate(price_series[:-interval]):
+            returns.append(price_series[idx + interval] / price)
         for _ in range(interval):
             returns.append(np.nan)
         return list(reversed(returns))
-    
+
     def calculate_internal_returns(self) -> List:
         """
         Calculates internal returns over 1, 2, 3, and 4 quarters by calculating 
@@ -412,17 +417,21 @@ class DataParser:
         """
         for i in [1, 2, 3, 4]:
             try:
-                self.price[f'stockPriceRatio_{i}Q'] = self.calculate_returns_from_series(
-                    self.price['stockPriceAverage'], i
+                self.price[
+                    f"stockPriceRatio_{i}Q"
+                ] = self.calculate_returns_from_series(
+                    self.price["stockPriceAverage"], i
                 )
-                self.snp_500[f'snpPriceRatio_{i}Q'] = self.calculate_returns_from_series(
-                    self.snp_500['S&P500PriceAverage'], i
+                self.snp_500[
+                    f"snpPriceRatio_{i}Q"
+                ] = self.calculate_returns_from_series(
+                    self.snp_500["S&P500PriceAverage"], i
                 )
             except ValueError:
                 len_df = len(self.ratios)
-                nan_array = len_df*[np.nan]
-                self.price[f'stockPriceRatio_{i}Q'] = nan_array
-                self.snp_500[f'snpPriceRatio_{i}Q'] = nan_array
+                nan_array = len_df * [np.nan]
+                self.price[f"stockPriceRatio_{i}Q"] = nan_array
+                self.snp_500[f"snpPriceRatio_{i}Q"] = nan_array
                 continue
 
     def calculate_relative_returns(self):
@@ -437,10 +446,8 @@ class DataParser:
         relative_returns_df = pd.DataFrame(index=self.ratios.index)
         for i in [1, 2, 3, 4]:
             header = f"priceRatioRelativeToS&P_{i}Q"
-            stock_return = self.price[f'stockPriceRatio_{i}Q']
-            snp_return = self.snp_500[f'snpPriceRatio_{i}Q']
-            relative_return = stock_return/snp_return
+            stock_return = self.price[f"stockPriceRatio_{i}Q"]
+            snp_return = self.snp_500[f"snpPriceRatio_{i}Q"]
+            relative_return = stock_return / snp_return
             relative_returns_df[header] = relative_return
         return relative_returns_df
-
-

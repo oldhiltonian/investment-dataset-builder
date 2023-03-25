@@ -14,7 +14,7 @@ key_path = Path().home() / "desktop" / "FinancialModellingPrep_API.txt"
 with open(key_path) as file:
     api_key = file.read()
 
-exchange_name_path = Path.cwd() / "investment_predictions" / "exchange_names.json"
+exchange_name_path = Path.cwd() / "investment_dataset_builder" / "exchange_names.json"
 with open(exchange_name_path, "r") as f:
     exchange_names_json = json.load(f)
 
@@ -59,7 +59,7 @@ class DatasetBuilder:
 
     """
 
-    def __init__(self, exchanges: List=['New York Stock Exchange']):
+    def __init__(self, exchanges: List = ["New York Stock Exchange"]):
         """
         Constructs all the necessary attributes for the DatasetBuilder object.
 
@@ -68,10 +68,10 @@ class DatasetBuilder:
                 a list of stock exchanges, by default None
         """
         self.exchanges = exchanges
-        self.possible_exchange_names = exchange_names_json['exchange_names']
+        self.possible_exchange_names = exchange_names_json["exchange_names"]
         self.raw_data = None
         self.dataset = None
-        
+
     def build(self):
         """
         Fetches raw data from API and builds the financial dataset.
@@ -88,9 +88,9 @@ class DatasetBuilder:
             url: str
                 the API url for fetching stock ticker data
         """
-        url = f'https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}'
+        url = f"https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}"
         return url
-    
+
     @staticmethod
     def make_stock_ticker_api_request(url: str) -> requests.Response:
         """
@@ -105,9 +105,11 @@ class DatasetBuilder:
                 an API response object
         """
         response = requests.get(url)
-        assert response.status_code == 200, f'API request failed: <{response.status_code}>'
+        assert (
+            response.status_code == 200
+        ), f"API request failed: <{response.status_code}>"
         return response
-    
+
     @staticmethod
     def response_to_json(response_object) -> List[Dict]:
         """
@@ -122,7 +124,7 @@ class DatasetBuilder:
                 a list of dictionaries containing the stock ticker data
         """
         return response_object.json()
-    
+
     def fetch_raw_stock_ticker_data(self) -> List[Dict]:
         """
         Fetches raw stock ticker data from API.
@@ -136,7 +138,7 @@ class DatasetBuilder:
         data = self.response_to_json(response)
         return data
 
-    def set_exchanges(self, new_exchanges: List[str]=['New York Stock Exchange']):
+    def set_exchanges(self, new_exchanges: List[str] = ["New York Stock Exchange"]):
         """
         Sets the exchanges attribute to a new list of stock exchanges.
 
@@ -160,8 +162,8 @@ class DatasetBuilder:
             bool
                 True if the security is valid for the given exchanges, False otherwise
         """
-        if dct.get('type') == 'stock':
-            if dct.get('exchange') in self.exchanges:
+        if dct.get("type") == "stock":
+            if dct.get("exchange") in self.exchanges:
                 return True
         return False
 
@@ -186,36 +188,28 @@ class DatasetBuilder:
             is_valid = self.check_valid_security(dct)
             if not is_valid:
                 continue
-            
-            ticker = dct['symbol']
+
+            ticker = dct["symbol"]
             print(ticker)
-            print(f'item: {idx}/{total_length}')
-            
+            print(f"item: {idx}/{total_length}")
+
             try:
                 scraper = DataScraper(ticker, api_key)
                 parser = DataParser(scraper.data_dictionary)
             except AssertionError:
                 self._failed_tickers.append(ticker)
                 continue
-            
+
             df = parser.final_data
             if total_df is None:
-                    total_df = df
+                total_df = df
             else:
                 total_df = pd.concat([total_df, df], axis=0)
-            
+
             self._successful_tickers.append(ticker)
             clear_output()
-        
+
         return total_df
-                    
+
     def clean_up_dataframe(df):
-        return df.drop(['start_date'], axis=1)
-
-
-    
-
-    
-
-    
-
+        return df.drop(["start_date"], axis=1)

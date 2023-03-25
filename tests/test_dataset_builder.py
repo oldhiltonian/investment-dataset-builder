@@ -1,5 +1,5 @@
 import sys
-from investment_predictions import DataScraper, DataParser, DatasetBuilder
+from investment_dataset_builder import DataScraper, DataParser, DatasetBuilder
 import unittest
 from unittest.mock import Mock, patch
 import itertools
@@ -9,27 +9,31 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 import json
+
 sys.path.append("..")
 
 key_path = Path().home() / "desktop" / "FinancialModellingPrep_API.txt"
 with open(key_path) as file:
     api_key = file.read()
 
-feature_path = Path.cwd() / "investment_predictions" / "features.json"
+feature_path = Path.cwd() / "investment_dataset_builder" / "features.json"
 with open(feature_path, "r") as f:
     features = json.load(f)
 
+
 def generate_class_instance():
-    return DatasetBuilder(['New York Stock Exchange'])
+    return DatasetBuilder(["New York Stock Exchange"])
+
 
 class TestDatasetBuilder(unittest.TestCase):
-
     def test_get_fmp_api_url(self):
-        instance = DatasetBuilder(['New York Stock Exchange'])
-        expected = f'https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}'
+        instance = DatasetBuilder(["New York Stock Exchange"])
+        expected = (
+            f"https://financialmodelingprep.com/api/v3/stock/list?apikey={api_key}"
+        )
         result = instance.get_fmp_api_url()
         self.assertEqual(result, expected)
-        self.assertNotEqual(expected, 'test')
+        self.assertNotEqual(expected, "test")
 
     def test_make_stock_ticker_api_request(self):
         url = "fakeurl.com"
@@ -54,57 +58,52 @@ class TestDatasetBuilder(unittest.TestCase):
         response.json.assert_called_once()
 
     def test_fetch_raw_stock_ticker_data(self):
-        '''This function is not tested explicitly as it is a composition#
-            of three other functions which are all unittested above'''
+        """This function is not tested explicitly as it is a composition#
+            of three other functions which are all unittested above"""
 
     def test_set_exchanges(self):
         instance = DatasetBuilder()
         exchange_list = [
-            ['AMEX', 'BSE', 'Athens'],
-            ['Fukuoka', 'KOSDAQ', 'Lisbon'],
-            ['NASDAQ', 'NSE', 'Prague']
+            ["AMEX", "BSE", "Athens"],
+            ["Fukuoka", "KOSDAQ", "Lisbon"],
+            ["NASDAQ", "NSE", "Prague"],
         ]
         for exchanges in exchange_list:
             instance.set_exchanges(exchanges)
             self.assertEqual(exchanges, instance.exchanges)
-        
-        for item in [np.nan, '', 'abc']:
+
+        for item in [np.nan, "", "abc"]:
             with self.assertRaises(AssertionError):
                 instance.set_exchanges([item])
 
     def test_is_valid_security(self):
         instance = generate_class_instance()
-        instance.set_exchanges(['Helsinki', 'Iceland', 'Milan', 'NSE'])
+        instance.set_exchanges(["Helsinki", "Iceland", "Milan", "NSE"])
         good_dicts = [
-            {'type': 'stock', 'exchange': 'Helsinki'},
-            {'type': 'stock', 'exchange': 'Iceland'},
-            {'type': 'stock', 'exchange': 'Milan'},
-            {'type': 'stock', 'exchange': 'NSE'}
+            {"type": "stock", "exchange": "Helsinki"},
+            {"type": "stock", "exchange": "Iceland"},
+            {"type": "stock", "exchange": "Milan"},
+            {"type": "stock", "exchange": "NSE"},
         ]
         bad_dicts = [
-            {'type': 'notstock', 'exchange': 'Helsinki'},
-            {'type': '', 'exchange': 'Iceland'},
-            {'type': 'STOCK', 'exchange': 'Milan'},
-            {'type': 'Stock', 'exchange': 'NSE'},
-            {'type': 'stock', 'exchange': 'Helsink'},
-            {'type': 'stock', 'exchange': 'Icelnd'},
-            {'type': 'stock', 'exchange': 'Mian'},
-            {'type': 'stock', 'exchange': 'NS'}
+            {"type": "notstock", "exchange": "Helsinki"},
+            {"type": "", "exchange": "Iceland"},
+            {"type": "STOCK", "exchange": "Milan"},
+            {"type": "Stock", "exchange": "NSE"},
+            {"type": "stock", "exchange": "Helsink"},
+            {"type": "stock", "exchange": "Icelnd"},
+            {"type": "stock", "exchange": "Mian"},
+            {"type": "stock", "exchange": "NS"},
         ]
 
         for dct in good_dicts:
             result = instance.check_valid_security(dct)
             self.assertEqual(result, True)
-        
+
         for dct in bad_dicts:
             result = instance.check_valid_security(dct)
             self.assertEqual(result, False)
 
-
     def test_build_dataset(self):
-        'Need to build this'
+        "Need to build this"
         pass
-
-
-
-    

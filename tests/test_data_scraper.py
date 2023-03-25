@@ -1,5 +1,5 @@
 import sys
-from investment_predictions import DataScraper
+from investment_dataset_builder import DataScraper
 import unittest
 from unittest.mock import Mock, patch
 import itertools
@@ -187,7 +187,7 @@ class TestDataScraper(unittest.TestCase):
             self.assertEqual(len(data), expected_length)
             for key in data.keys():
                 self.assertIsInstance(key, str)
-                if key != 'price':
+                if key != "price":
                     self.assertIsInstance(data[key], list)
                 else:
                     self.assertIsInstance(data[key], pd.DataFrame)
