@@ -69,7 +69,6 @@ class DatasetBuilder:
         """
         self.exchanges = exchanges
         self.possible_exchange_names = exchange_names_json['exchange_names']
-        self.copy=copy
         self.raw_data = None
         self.dataset = None
         
@@ -79,7 +78,7 @@ class DatasetBuilder:
         """
         self.raw_data = self.fetch_raw_stock_ticker_data()
 
-        self.dataset = self.build_dataset()
+        self.dataset = self.clean_up_dataframe(self.build_dataset())
 
     def get_fmp_api_url(self) -> str:
         """
@@ -137,13 +136,13 @@ class DatasetBuilder:
         data = self.response_to_json(response)
         return data
 
-    def set_exchanges(self, new_exchanges: List[str]='NASDAQ'):
+    def set_exchanges(self, new_exchanges: List[str]=['New York Stock Exchange']):
         """
         Sets the exchanges attribute to a new list of stock exchanges.
 
         Parameters:
             new_exchanges : List[str], optional
-                a list of new stock exchanges, by default 'NASDAQ'
+                a list of new stock exchanges, by default 'New York Stock Exchange'
         """
         for item in new_exchanges:
             assert str(item) in self.possible_exchange_names

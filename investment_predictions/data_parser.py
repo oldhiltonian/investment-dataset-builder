@@ -260,7 +260,7 @@ class DataParser:
         path = (
             Path.cwd()
             / "investment_predictions"
-            / "data"
+            / "config_data"
             / "snp500_trading_data_1970_to_2023.parquet"
         )
         df = pd.read_parquet(path)
