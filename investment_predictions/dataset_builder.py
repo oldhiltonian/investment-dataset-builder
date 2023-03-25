@@ -8,6 +8,7 @@ import datetime as dt
 import numpy as np
 import requests
 from IPython.display import clear_output
+import time
 
 key_path = Path().home() / "desktop" / "FinancialModellingPrep_API.txt"
 with open(key_path) as file:
@@ -68,6 +69,7 @@ class DatasetBuilder:
         """
         self.exchanges = exchanges
         self.possible_exchange_names = exchange_names_json['exchange_names']
+        self.copy=copy
         self.raw_data = None
         self.dataset = None
         
@@ -76,8 +78,8 @@ class DatasetBuilder:
         Fetches raw data from API and builds the financial dataset.
         """
         self.raw_data = self.fetch_raw_stock_ticker_data()
+
         self.dataset = self.build_dataset()
-        # self.dataset = self.dataset
 
     def get_fmp_api_url(self) -> str:
         """
@@ -172,10 +174,11 @@ class DatasetBuilder:
             pd.DataFrame
                 a pandas dataframe containing the built financial dataset
         """
+        total_length = len(self.raw_data)
         self._failed_tickers = list()
         self._successful_tickers = list()
         total_df = None
-        for dct in self.raw_data:
+        for idx, dct in enumerate(self.raw_data):
             # We only want to consider stocks
             is_valid = self.check_valid_security(dct)
             if not is_valid:
@@ -183,6 +186,7 @@ class DatasetBuilder:
     
             ticker = dct['symbol']
             print(ticker)
+            print(f'item: {idx}/{total_length}')
             
             try:
                 scraper = DataScraper(ticker, api_key)
@@ -201,6 +205,9 @@ class DatasetBuilder:
         
         return total_df
                     
+    def clean_up_dataframe(df):
+        return df.drop(['start_date'], axis=1)
+
     # def validate_data_is_float64(self, df):
     #     ''' eed to redisgn this'''
     #     df = df.astype('float64')
