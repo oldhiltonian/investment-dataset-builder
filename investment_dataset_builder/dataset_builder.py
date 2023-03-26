@@ -211,5 +211,10 @@ class DatasetBuilder:
 
         return total_df
 
+    @staticmethod
     def clean_up_dataframe(df):
         return df.drop(["start_date"], axis=1)
+    
+    def save_dataset(self, path):
+        self.dataset.to_parquet(path, index=True)
+    
