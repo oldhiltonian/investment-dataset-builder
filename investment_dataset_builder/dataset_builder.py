@@ -213,8 +213,23 @@ class DatasetBuilder:
 
     @staticmethod
     def clean_up_dataframe(df):
+        """
+        Removes the "start_date" column from the input DataFrame.
+
+        Args:
+            df (pd.DataFrame): Input DataFrame to be cleaned.
+
+        Returns:
+            pd.DataFrame: Cleaned DataFrame without the "start_date" column.
+        """
         return df.drop(["start_date"], axis=1)
     
     def save_dataset(self, path):
+        """
+        Saves the dataset as a Parquet file at the specified path with the index set to True.
+
+        Args:
+            path (str): The file path where the dataset will be saved.
+        """
         self.dataset.to_parquet(path, index=True)
     
