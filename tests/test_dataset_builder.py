@@ -107,3 +107,20 @@ class TestDatasetBuilder(unittest.TestCase):
     def test_build_dataset(self):
         "Need to build this"
         pass
+
+    def test_save_dataset(self):
+        instance = generate_class_instance()
+        data = {
+            'column1': [1, 2, 3, 4],
+            'column2': [2, 4, 6, 8],
+        }
+        sample_dataset = pd.DataFrame(data)
+        instance.dataset = sample_dataset
+        path = Path.cwd() / "test.parquet"
+        instance.save_dataset(path)
+        self.assertTrue(path.exists())
+        saved_dataset = pd.read_parquet(path)
+        self.assertTrue(saved_dataset.equals(sample_dataset))
+        path.unlink()
+        
+
