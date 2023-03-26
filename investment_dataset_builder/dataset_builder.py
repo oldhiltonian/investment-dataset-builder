@@ -208,7 +208,7 @@ class DatasetBuilder:
 
             self._successful_tickers.append(ticker)
             clear_output()
-
+        
         return total_df
 
     @staticmethod
