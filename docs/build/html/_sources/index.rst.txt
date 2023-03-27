@@ -9,7 +9,7 @@ Welcome to investment-dataset-builder's documentation!
 **investment-dataset-builder** is a Python package that provides a set of tools to build a dataset of 
 financial data for machine learning purposes. It pulls data from the Financial Modelling Prep API and offers
 a very simple interface to build a dataset of stock information across many exchanges and markets. Check
-out the :docs:`usage` section for more information.
+out the :doc:`usage` section for more information.
 
 .. note::
 

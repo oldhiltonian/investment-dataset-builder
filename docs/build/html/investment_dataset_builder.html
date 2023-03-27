@@ -1,46 +1,104 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-
-    <title>investment_dataset_builder package &#8212; investment-dataset-builder v1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>investment_dataset_builder package &mdash; investment-dataset-builder v1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="investment_dataset_builder" href="modules.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="prev" title="investment_dataset_builder" href="modules.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="index.html" class="icon icon-home">
+            investment-dataset-builder
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">investment_dataset_builder</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">investment_dataset_builder package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-investment_dataset_builder.data_parser">investment_dataset_builder.data_parser module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#investment_dataset_builder.data_parser.DataParser"><code class="docutils literal notranslate"><span class="pre">DataParser</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-investment_dataset_builder.data_scraper">investment_dataset_builder.data_scraper module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#investment_dataset_builder.data_scraper.DataScraper"><code class="docutils literal notranslate"><span class="pre">DataScraper</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-investment_dataset_builder.dataset_builder">investment_dataset_builder.dataset_builder module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#investment_dataset_builder.dataset_builder.DatasetBuilder"><code class="docutils literal notranslate"><span class="pre">DatasetBuilder</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-investment_dataset_builder">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-          <div class="body" role="main">
-            
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">investment-dataset-builder</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">investment_dataset_builder</a></li>
+      <li class="breadcrumb-item active">investment_dataset_builder package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/investment_dataset_builder.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="investment-dataset-builder-package">
-<h1>investment_dataset_builder package<a class="headerlink" href="#investment-dataset-builder-package" title="Permalink to this heading">¶</a></h1>
+<h1>investment_dataset_builder package<a class="headerlink" href="#investment-dataset-builder-package" title="Permalink to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-investment_dataset_builder.data_parser">
-<span id="investment-dataset-builder-data-parser-module"></span><h2>investment_dataset_builder.data_parser module<a class="headerlink" href="#module-investment_dataset_builder.data_parser" title="Permalink to this heading">¶</a></h2>
+<span id="investment-dataset-builder-data-parser-module"></span><h2>investment_dataset_builder.data_parser module<a class="headerlink" href="#module-investment_dataset_builder.data_parser" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">investment_dataset_builder.data_parser.</span></span><span class="sig-name descname"><span class="pre">DataParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dictionary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">investment_dataset_builder.data_parser.</span></span><span class="sig-name descname"><span class="pre">DataParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dictionary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class is built to accept the DataScraper.data_dictionary dictionary, parse the
 data and create a single DataFrame that represents the data for that company.</p>
@@ -62,7 +120,7 @@ single company.</p>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.data_dictionary">
-<span class="sig-name descname"><span class="pre">data_dictionary</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.data_dictionary" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">data_dictionary</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.data_dictionary" title="Permalink to this definition"></a></dt>
 <dd><p>A dictionary containing data relevant
 to a single company.</p>
 <dl class="field-list simple">
@@ -74,7 +132,7 @@ to a single company.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.info">
-<span class="sig-name descname"><span class="pre">info</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.info" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">info</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.info" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing company information such as
 symbol, companyName, currency, exchange, industry, and sector.</p>
 <dl class="field-list simple">
@@ -86,7 +144,7 @@ symbol, companyName, currency, exchange, industry, and sector.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.ratios">
-<span class="sig-name descname"><span class="pre">ratios</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.ratios" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">ratios</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.ratios" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing relevant data from the
 ratios sub-dictionary.</p>
 <dl class="field-list simple">
@@ -98,7 +156,7 @@ ratios sub-dictionary.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.metrics">
-<span class="sig-name descname"><span class="pre">metrics</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.metrics" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">metrics</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.metrics" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing relevant data from the
 metrics sub-dictionary.</p>
 <dl class="field-list simple">
@@ -110,7 +168,7 @@ metrics sub-dictionary.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.is_">
-<span class="sig-name descname"><span class="pre">is_</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.is_" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">is_</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.is_" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing relevant data from the is
 sub-dictionary.</p>
 <dl class="field-list simple">
@@ -122,7 +180,7 @@ sub-dictionary.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.price">
-<span class="sig-name descname"><span class="pre">price</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.price" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">price</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.price" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing daily price data for the
 company, filtered into quarters.</p>
 <dl class="field-list simple">
@@ -134,7 +192,7 @@ company, filtered into quarters.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.snp_500">
-<span class="sig-name descname"><span class="pre">snp_500</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.snp_500" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">snp_500</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.snp_500" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing daily price data for the
 S&amp;P500 index, filtered into quarters.</p>
 <dl class="field-list simple">
@@ -146,7 +204,7 @@ S&amp;P500 index, filtered into quarters.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.final_data">
-<span class="sig-name descname"><span class="pre">final_data</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.final_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">final_data</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.final_data" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing all the relevant data
 from info, ratios, metrics, <a href="#id12"><span class="problematic" id="id13">is_</span></a>, price, and snp_500 DataFrames combined.</p>
 <dl class="field-list simple">
@@ -158,7 +216,7 @@ from info, ratios, metrics, <a href="#id12"><span class="problematic" id="id13">
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.returns">
-<span class="sig-name descname"><span class="pre">returns</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.returns" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">returns</span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.returns" title="Permalink to this definition"></a></dt>
 <dd><p>A DataFrame containing calculated relative returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -190,54 +248,54 @@ Creates a start_date feature for the given date string array.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.parse_data_dictionary">
-<span class="sig-name descname"><span class="pre">parse_data_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_data_dictionary" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_data_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_data_dictionary" title="Permalink to this definition"></a></dt>
 <dd><p>Parses the data dictionary.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.parse_info">
-<span class="sig-name descname"><span class="pre">parse_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_info" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_info" title="Permalink to this definition"></a></dt>
 <dd><p>Parses the info sub-dictionary to return a DataFrame with relevant
 company information.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.parse_ratios">
-<span class="sig-name descname"><span class="pre">parse_ratios</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_ratios" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_ratios</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_ratios" title="Permalink to this definition"></a></dt>
 <dd><p>Parses the ratios sub-dictionary to return a DataFrame with relevant
 data and period_start_date.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.parse_metrics">
-<span class="sig-name descname"><span class="pre">parse_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_metrics" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_metrics" title="Permalink to this definition"></a></dt>
 <dd><p>Parses the metrics sub-dictionary to return a DataFrame with relevant
 data and period_start_date.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.parse_income_statement">
-<span class="sig-name descname"><span class="pre">parse_income_statement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_income_statement" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_income_statement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_income_statement" title="Permalink to this definition"></a></dt>
 <dd><p>Parses the is sub-dictionary to return a DataFrame with relevant data
 and period_start_date.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.parse_price">
-<span class="sig-name descname"><span class="pre">parse_price</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_price" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parse_price</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.parse_price" title="Permalink to this definition"></a></dt>
 <dd><p>Parses the price sub-dictionary to return a DataFrame containing daily
 price data for the company.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.filter_dataframes">
-<span class="sig-name descname"><span class="pre">filter_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.filter_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.filter_dataframes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">filter_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.filter_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.filter_dataframes" title="Permalink to this definition"></a></dt>
 <dd><p>Filters all DataFrames to include only common indices.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.load_snp_500">
-<span class="sig-name descname"><span class="pre">load_snp_500</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.load_snp_500"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.load_snp_500" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">load_snp_500</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.load_snp_500"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.load_snp_500" title="Permalink to this definition"></a></dt>
 <dd><p>Loads and returns daily price data for the S&amp;P500 index.</p>
 </dd></dl>
 
@@ -271,26 +329,26 @@ Converts the given date string array to an array of date objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.create_date_objects_from_pd_timestamps">
-<span class="sig-name descname"><span class="pre">create_date_objects_from_pd_timestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">np.array</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_date_objects_from_pd_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_date_objects_from_pd_timestamps" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_date_objects_from_pd_timestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">np.array</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_date_objects_from_pd_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_date_objects_from_pd_timestamps" title="Permalink to this definition"></a></dt>
 <dd><p>Converts the given pandas timestamp array to an array of date objects.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.calculate_PE_ratios">
-<span class="sig-name descname"><span class="pre">calculate_PE_ratios</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_PE_ratios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_PE_ratios" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_PE_ratios</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_PE_ratios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_PE_ratios" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates PE ratios for the company and updates the ratios DataFrame.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.combine_dataframes">
-<span class="sig-name descname"><span class="pre">combine_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.combine_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.combine_dataframes" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">combine_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.combine_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.combine_dataframes" title="Permalink to this definition"></a></dt>
 <dd><p>Combines info, ratios, metrics, is, price, and snp_500 DataFrames into a
 single DataFrame.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.calculate_internal_returns">
-<span class="sig-name descname"><span class="pre">calculate_internal_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_internal_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_internal_returns" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_internal_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_internal_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_internal_returns" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates returns for the company’s stock price and the S&amp;P 500 index,
 with a lag of 1, 2, 3, or 4 quarters, and stores them in the respective
 DataFrames.</p>
@@ -298,7 +356,7 @@ DataFrames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.calculate_relative_returns">
-<span class="sig-name descname"><span class="pre">calculate_relative_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_relative_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_relative_returns" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_relative_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_relative_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_relative_returns" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the returns of the company’s stock price relative to the
 S&amp;P 500 index returns, with a lag of 1, 2, 3, or 4 quarters, and
 returns a DataFrame containing these values.</p>
@@ -306,7 +364,7 @@ returns a DataFrame containing these values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">calculate_PE_ratios</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_PE_ratios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_PE_ratios</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_PE_ratios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the PE ratios of the company and adds them as columns to the ratios
 DataFrame.</p>
 <p>The PE ratios are calculated as the average, low, and high prices divided by
@@ -320,7 +378,7 @@ four times the EPS.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">calculate_internal_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_internal_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_internal_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_internal_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates internal returns over 1, 2, 3, and 4 quarters by calculating
 the ratio of the average stock prices for those quarters.</p>
 <dl class="field-list simple">
@@ -332,7 +390,7 @@ the ratio of the average stock prices for those quarters.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">calculate_relative_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_relative_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_relative_returns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_relative_returns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
 <dd><dl class="simple">
 <dt>Calculates the relative returns of the stock compared to the S&amp;P500</dt><dd><p>over 1Q, 2Q, 3Q, and 4Q periods.</p>
 </dd>
@@ -354,7 +412,7 @@ to the S&amp;P 500 over 1Q, 2Q, 3Q, and 4Q periods.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.calculate_returns_from_series">
-<span class="sig-name descname"><span class="pre">calculate_returns_from_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_returns_from_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_returns_from_series" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate_returns_from_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.calculate_returns_from_series"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.calculate_returns_from_series" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the returns for the given price DataFrame over a specified interval.
 Assumes that the most recent price is at the top of the df.</p>
 <dl class="field-list simple">
@@ -386,7 +444,7 @@ Defaults to 1.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">combine_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.combine_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">combine_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.combine_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
 <dd><p>Combines the parsed and filtered DataFrames for the company into a single
 DataFrame.</p>
 <p>The method drops the ‘date’ and ‘period’ columns from the metrics and income
@@ -405,7 +463,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id4">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_date_objects_from_pd_timestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_date_objects_from_pd_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_date_objects_from_pd_timestamps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_date_objects_from_pd_timestamps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
 <dd><p>Creates an array of date objects from an array of pandas Timestamps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -422,7 +480,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.create_date_objects_from_strings">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_date_objects_from_strings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_string_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_date_objects_from_strings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_date_objects_from_strings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_date_objects_from_strings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_string_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_date_objects_from_strings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_date_objects_from_strings" title="Permalink to this definition"></a></dt>
 <dd><p>Creates an array of date objects from an array of date strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -442,7 +500,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.create_df_index">
-<span class="sig-name descname"><span class="pre">create_df_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Index</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_df_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_df_index" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_df_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Index</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_df_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_df_index" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a pandas Index for the given DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -459,7 +517,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.create_period_start_date_feature">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_period_start_date_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_string_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_period_start_date_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_period_start_date_feature" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_period_start_date_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_string_array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.create_period_start_date_feature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.create_period_start_date_feature" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a list of start dates for a given array of date strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -480,7 +538,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.filter_daily_into_quarters">
-<span class="sig-name descname"><span class="pre">filter_daily_into_quarters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.filter_daily_into_quarters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.filter_daily_into_quarters" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">filter_daily_into_quarters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stock'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.filter_daily_into_quarters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.filter_daily_into_quarters" title="Permalink to this definition"></a></dt>
 <dd><p>Filters daily stock data into quarterly data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -501,7 +559,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">filter_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.filter_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">filter_dataframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.filter_dataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
 <dd><p>Filters the instance’s DataFrames to only include common indices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -512,7 +570,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.json_to_dataframe">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">json_to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.json_to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.json_to_dataframe" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">json_to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.json_to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.json_to_dataframe" title="Permalink to this definition"></a></dt>
 <dd><p>Converts JSON data to a pandas DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -532,7 +590,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">load_snp_500</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.load_snp_500"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">load_snp_500</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.load_snp_500"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the S&amp;P 500 trading data from a parquet file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -546,7 +604,7 @@ company.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_parser.DataParser.pasrse_data_dictionary">
-<span class="sig-name descname"><span class="pre">pasrse_data_dictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.pasrse_data_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.pasrse_data_dictionary" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pasrse_data_dictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_parser.html#DataParser.pasrse_data_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_parser.DataParser.pasrse_data_dictionary" title="Permalink to this definition"></a></dt>
 <dd><p>Parse data from the data dictionary based on a given key and return a DataFrame with
 the relevant columns.</p>
 <dl class="field-list simple">
@@ -569,10 +627,10 @@ the relevant columns.</p>
 
 </section>
 <section id="module-investment_dataset_builder.data_scraper">
-<span id="investment-dataset-builder-data-scraper-module"></span><h2>investment_dataset_builder.data_scraper module<a class="headerlink" href="#module-investment_dataset_builder.data_scraper" title="Permalink to this heading">¶</a></h2>
+<span id="investment-dataset-builder-data-scraper-module"></span><h2>investment_dataset_builder.data_scraper module<a class="headerlink" href="#module-investment_dataset_builder.data_scraper" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">investment_dataset_builder.data_scraper.</span></span><span class="sig-name descname"><span class="pre">DataScraper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'quarter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'company'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">investment_dataset_builder.data_scraper.</span></span><span class="sig-name descname"><span class="pre">DataScraper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'quarter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'company'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class is used to scrape financial data from Financial Modeling Prep API and Yahoo Finance.</p>
 <dl class="field-list simple">
@@ -587,7 +645,7 @@ the relevant columns.</p>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.ticker">
-<span class="sig-name descname"><span class="pre">ticker</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.ticker" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">ticker</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.ticker" title="Permalink to this definition"></a></dt>
 <dd><p>The ticker symbol for the stock being scraped.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -598,7 +656,7 @@ the relevant columns.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.period">
-<span class="sig-name descname"><span class="pre">period</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.period" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">period</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.period" title="Permalink to this definition"></a></dt>
 <dd><p>The period to retrieve data for.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -609,7 +667,7 @@ the relevant columns.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.api_key">
-<span class="sig-name descname"><span class="pre">api_key</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.api_key" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">api_key</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.api_key" title="Permalink to this definition"></a></dt>
 <dd><p>The API key used to access Financial Modeling Prep API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -620,7 +678,7 @@ the relevant columns.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.fmp_api_requests">
-<span class="sig-name descname"><span class="pre">fmp_api_requests</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.fmp_api_requests" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fmp_api_requests</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.fmp_api_requests" title="Permalink to this definition"></a></dt>
 <dd><p>The list of available data types to retrieve from Financial Modeling Prep API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -631,7 +689,7 @@ the relevant columns.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.data_dictionary">
-<span class="sig-name descname"><span class="pre">data_dictionary</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.data_dictionary" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">data_dictionary</span></span><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.data_dictionary" title="Permalink to this definition"></a></dt>
 <dd><p>The dictionary of all data retrieved from Financial Modeling Prep API and Yahoo Finance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -647,7 +705,7 @@ the relevant columns.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.assert_valid_user_inputs">
-<span class="sig-name descname"><span class="pre">assert_valid_user_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.assert_valid_user_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.assert_valid_user_inputs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">assert_valid_user_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.assert_valid_user_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.assert_valid_user_inputs" title="Permalink to this definition"></a></dt>
 <dd><p>Asserts that the inputs for the DataScraper class are valid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
@@ -658,7 +716,7 @@ the relevant columns.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.convert_raw_data_to_json">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convert_raw_data_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Response</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.convert_raw_data_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.convert_raw_data_to_json" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convert_raw_data_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Response</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.convert_raw_data_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.convert_raw_data_to_json" title="Permalink to this definition"></a></dt>
 <dd><p>Converts the response from an API request to a JSON object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -678,7 +736,7 @@ the relevant columns.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.fetch_data">
-<span class="sig-name descname"><span class="pre">fetch_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.fetch_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.fetch_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fetch_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.fetch_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.fetch_data" title="Permalink to this definition"></a></dt>
 <dd><p>Fetches all financial data from Financial Modeling Prep API and Yahoo Finance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -695,7 +753,7 @@ the relevant columns.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.fetch_stock_price_data">
-<span class="sig-name descname"><span class="pre">fetch_stock_price_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.fetch_stock_price_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.fetch_stock_price_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fetch_stock_price_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.fetch_stock_price_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.fetch_stock_price_data" title="Permalink to this definition"></a></dt>
 <dd><p>Fetches stock price data from Yahoo Finance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -712,7 +770,7 @@ the relevant columns.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.get_fmp_api_url">
-<span class="sig-name descname"><span class="pre">get_fmp_api_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.get_fmp_api_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.get_fmp_api_url" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_fmp_api_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.get_fmp_api_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.get_fmp_api_url" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the URL for a specific data type from Financial Modeling Prep API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -732,7 +790,7 @@ the relevant columns.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.data_scraper.DataScraper.make_fmp_api_requests">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_fmp_api_requests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.make_fmp_api_requests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.make_fmp_api_requests" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_fmp_api_requests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/data_scraper.html#DataScraper.make_fmp_api_requests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.data_scraper.DataScraper.make_fmp_api_requests" title="Permalink to this definition"></a></dt>
 <dd><p>Makes an HTTP request to Financial Modeling Prep API and returns the response.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -754,63 +812,63 @@ the relevant columns.</p>
 
 </section>
 <section id="module-investment_dataset_builder.dataset_builder">
-<span id="investment-dataset-builder-dataset-builder-module"></span><h2>investment_dataset_builder.dataset_builder module<a class="headerlink" href="#module-investment_dataset_builder.dataset_builder" title="Permalink to this heading">¶</a></h2>
+<span id="investment-dataset-builder-dataset-builder-module"></span><h2>investment_dataset_builder.dataset_builder module<a class="headerlink" href="#module-investment_dataset_builder.dataset_builder" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">investment_dataset_builder.dataset_builder.</span></span><span class="sig-name descname"><span class="pre">DatasetBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exchanges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['New</span> <span class="pre">York</span> <span class="pre">Stock</span> <span class="pre">Exchange']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">investment_dataset_builder.dataset_builder.</span></span><span class="sig-name descname"><span class="pre">DatasetBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exchanges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['New</span> <span class="pre">York</span> <span class="pre">Stock</span> <span class="pre">Exchange']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class used to build a financial dataset from a given list of stock exchanges.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.exchanges">
-<span class="sig-name descname"><span class="pre">exchanges</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.exchanges" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">exchanges</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.exchanges" title="Permalink to this definition"></a></dt>
 <dd><p>List
 a list of stock exchanges</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.possible_exchange_names">
-<span class="sig-name descname"><span class="pre">possible_exchange_names</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.possible_exchange_names" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">possible_exchange_names</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.possible_exchange_names" title="Permalink to this definition"></a></dt>
 <dd><p>List
 a list of possible stock exchange names</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.raw_data">
-<span class="sig-name descname"><span class="pre">raw_data</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.raw_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">raw_data</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.raw_data" title="Permalink to this definition"></a></dt>
 <dd><p>List[Dict]
 a list of stock ticker data in dictionary format</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.dataset">
-<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.dataset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.dataset" title="Permalink to this definition"></a></dt>
 <dd><p>pd.DataFrame
 a pandas dataframe containing the built financial dataset</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder._failed_tickers">
-<span class="sig-name descname"><span class="pre">_failed_tickers</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder._failed_tickers" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_failed_tickers</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder._failed_tickers" title="Permalink to this definition"></a></dt>
 <dd><p>List[str]
 a list of ticker symbols that could not be scraped</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder._successful_tickers">
-<span class="sig-name descname"><span class="pre">_successful_tickers</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder._successful_tickers" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_successful_tickers</span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder._successful_tickers" title="Permalink to this definition"></a></dt>
 <dd><p>List[str]
 a list of ticker symbols that were successfully scraped</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.build" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.build" title="Permalink to this definition"></a></dt>
 <dd><p>Fetches raw data from API and builds the financial dataset</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.get_fmp_api_url">
-<span class="sig-name descname"><span class="pre">get_fmp_api_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.get_fmp_api_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.get_fmp_api_url" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_fmp_api_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.get_fmp_api_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.get_fmp_api_url" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the API url for fetching stock ticker data</p>
 </dd></dl>
 
@@ -823,13 +881,13 @@ Makes an API request for stock ticker data</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.response_to_json">
-<span class="sig-name descname"><span class="pre">response_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.response_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.response_to_json" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">response_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.response_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.response_to_json" title="Permalink to this definition"></a></dt>
 <dd><p>Converts API response object to a list of dictionaries</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.fetch_raw_stock_ticker_data">
-<span class="sig-name descname"><span class="pre">fetch_raw_stock_ticker_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.fetch_raw_stock_ticker_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.fetch_raw_stock_ticker_data" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fetch_raw_stock_ticker_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.fetch_raw_stock_ticker_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.fetch_raw_stock_ticker_data" title="Permalink to this definition"></a></dt>
 <dd><p>Fetches raw stock ticker data from API</p>
 </dd></dl>
 
@@ -849,25 +907,25 @@ Checks if the security is valid for the given exchanges</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.build_dataset">
-<span class="sig-name descname"><span class="pre">build_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.build_dataset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.build_dataset" title="Permalink to this definition"></a></dt>
 <dd><p>Builds the financial dataset from the raw stock ticker data</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.validate_data_is_float64">
-<span class="sig-name descname"><span class="pre">validate_data_is_float64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.validate_data_is_float64" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">validate_data_is_float64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pd.DataFrame</span></span></span><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.validate_data_is_float64" title="Permalink to this definition"></a></dt>
 <dd><p>Validates that the data in the dataframe is of type float64</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition"></a></dt>
 <dd><p>Fetches raw data from API and builds the financial dataset.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">build_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.build_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Permalink to this definition"></a></dt>
 <dd><p>Builds the financial dataset from the raw stock ticker data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -882,7 +940,7 @@ Checks if the security is valid for the given exchanges</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.check_valid_security">
-<span class="sig-name descname"><span class="pre">check_valid_security</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.check_valid_security"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.check_valid_security" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check_valid_security</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.check_valid_security"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.check_valid_security" title="Permalink to this definition"></a></dt>
 <dd><p>Checks if the security is valid for the given exchanges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -901,7 +959,7 @@ a dictionary containing stock ticker data</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.clean_up_dataframe">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clean_up_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.clean_up_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.clean_up_dataframe" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clean_up_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.clean_up_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.clean_up_dataframe" title="Permalink to this definition"></a></dt>
 <dd><p>Removes the “start_date” column from the input DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -918,7 +976,7 @@ a dictionary containing stock ticker data</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">fetch_raw_stock_ticker_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.fetch_raw_stock_ticker_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fetch_raw_stock_ticker_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.fetch_raw_stock_ticker_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition"></a></dt>
 <dd><p>Fetches raw stock ticker data from API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -933,7 +991,7 @@ a dictionary containing stock ticker data</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id10">
-<span class="sig-name descname"><span class="pre">get_fmp_api_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.get_fmp_api_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_fmp_api_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.get_fmp_api_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the API url for fetching stock ticker data.</p>
 <dl class="simple">
 <dt>Returns</dt><dd><dl class="simple">
@@ -946,7 +1004,7 @@ a dictionary containing stock ticker data</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.make_stock_ticker_api_request">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_stock_ticker_api_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.make_stock_ticker_api_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.make_stock_ticker_api_request" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_stock_ticker_api_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.make_stock_ticker_api_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.make_stock_ticker_api_request" title="Permalink to this definition"></a></dt>
 <dd><p>Makes an API request for stock ticker data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -965,7 +1023,7 @@ the API url for fetching stock ticker data</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id11">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">response_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.response_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">response_to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.response_to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
 <dd><p>Converts API response object to a list of dictionaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -984,7 +1042,7 @@ an API response object</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.save_dataset">
-<span class="sig-name descname"><span class="pre">save_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.save_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.save_dataset" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">save_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.save_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.save_dataset" title="Permalink to this definition"></a></dt>
 <dd><p>Saves the dataset as a Parquet file at the specified path with the index set to True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -995,7 +1053,7 @@ an API response object</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="investment_dataset_builder.dataset_builder.DatasetBuilder.set_exchanges">
-<span class="sig-name descname"><span class="pre">set_exchanges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_exchanges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['New</span> <span class="pre">York</span> <span class="pre">Stock</span> <span class="pre">Exchange']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.set_exchanges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.set_exchanges" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_exchanges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_exchanges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['New</span> <span class="pre">York</span> <span class="pre">Stock</span> <span class="pre">Exchange']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/investment_dataset_builder/dataset_builder.html#DatasetBuilder.set_exchanges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#investment_dataset_builder.dataset_builder.DatasetBuilder.set_exchanges" title="Permalink to this definition"></a></dt>
 <dd><p>Sets the exchanges attribute to a new list of stock exchanges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1009,82 +1067,38 @@ a list of new stock exchanges, by default ‘New York Stock Exchange’</p>
 
 </section>
 <section id="module-investment_dataset_builder">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-investment_dataset_builder" title="Permalink to this heading">¶</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-investment_dataset_builder" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="investment_dataset_builder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, JFD.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">investment-dataset-builder</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">investment_dataset_builder</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">investment_dataset_builder package</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="modules.html">investment_dataset_builder</a><ul>
-      <li>Previous: <a href="modules.html" title="previous chapter">investment_dataset_builder</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2023, JFD.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
-      
-      |
-      <a href="_sources/investment_dataset_builder.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>
