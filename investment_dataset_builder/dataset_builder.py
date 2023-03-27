@@ -175,7 +175,6 @@ class DatasetBuilder:
             pd.DataFrame
                 a pandas dataframe containing the built financial dataset
         """
-        ### TODO: add connectivity error catching
         # setup
         total_length = len(self.raw_data)
         self._failed_tickers = list()
