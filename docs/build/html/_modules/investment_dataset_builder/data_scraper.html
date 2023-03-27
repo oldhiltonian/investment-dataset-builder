@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>investment_dataset_builder.data_scraper &#8212; investment-dataset-builder v1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for investment_dataset_builder.data_scraper</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<span class="kn">from</span> <span class="nn">pandas_datareader</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">pdr</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">Response</span><span class="p">,</span> <span class="n">Request</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+
+<span class="n">yf</span><span class="o">.</span><span class="n">pdr_override</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="DataScraper"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper">[docs]</a><span class="k">class</span> <span class="nc">DataScraper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is used to scrape financial data from Financial Modeling Prep API and Yahoo Finance.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ticker (str): The ticker symbol for the stock to scrape data for.</span>
+<span class="sd">        api_key (str, optional): The API key to access Financial Modeling Prep API. Defaults to &quot;&quot;.</span>
+<span class="sd">        period (str, optional): The period to retrieve data for. Can be &#39;annual&#39; or &#39;quarter&#39;. Defaults to &#39;quarter&#39;.</span>
+<span class="sd">        data_type (str, optional): The type of data to retrieve. Can be &#39;company&#39; or &#39;economic&#39;. Defaults to &#39;company&#39;.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ticker (str): The ticker symbol for the stock being scraped.</span>
+<span class="sd">        period (str): The period to retrieve data for.</span>
+<span class="sd">        api_key (str): The API key used to access Financial Modeling Prep API.</span>
+<span class="sd">        fmp_api_requests (list): The list of available data types to retrieve from Financial Modeling Prep API.</span>
+<span class="sd">        data_dictionary (dict): The dictionary of all data retrieved from Financial Modeling Prep API and Yahoo Finance.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: Raised if ticker, period, or api_key are not valid.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">period</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;quarter&quot;</span><span class="p">,</span>
+        <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;company&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="n">ticker</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">period</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="o">=</span> <span class="n">data_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assert_valid_user_inputs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmp_company_requests</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;ratios&quot;</span><span class="p">,</span> <span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;is&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fmp_economic_requests</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;realGDPPerCapita&quot;</span><span class="p">,</span> <span class="s2">&quot;CPI&quot;</span><span class="p">,</span> <span class="s2">&quot;consumerSentiment&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dictionary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DataScraper.assert_valid_user_inputs"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper.assert_valid_user_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">assert_valid_user_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Asserts that the inputs for the DataScraper class are valid.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: Raised if ticker, period, or api_key are not valid.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="s2">&quot;^GSPC&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">==</span> <span class="s2">&quot;S&amp;P500&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quarter&quot;</span><span class="p">,</span>
+        <span class="p">],</span> <span class="s2">&quot;period must be &#39;annual&#39; or &#39;quarter&#39;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;company&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;economic&quot;</span><span class="p">,</span>
+        <span class="p">],</span> <span class="s2">&quot;data_type must be &#39;company&#39; or &#39;economic&#39;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span></div>
+
+<div class="viewcode-block" id="DataScraper.get_fmp_api_url"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper.get_fmp_api_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_fmp_api_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the URL for a specific data type from Financial Modeling Prep API.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_type (str, optional): The type of data to retrieve from Financial Modeling Prep API.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The URL to retrieve the specified data type from Financial Modeling Prep API.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: Raised if the specified data_type is not valid.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;ratios&quot;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;https://financialmodelingprep.com/api/&quot;</span>
+                <span class="s2">&quot;v3/ratios/</span><span class="si">{}</span><span class="s2">?period=</span><span class="si">{}</span><span class="s2">&amp;limit=400&amp;apikey=</span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;metrics&quot;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;https://financialmodelingprep.com/api/v3/&quot;</span>
+                <span class="s2">&quot;key-metrics/</span><span class="si">{}</span><span class="s2">?period=</span><span class="si">{}</span><span class="s2">&amp;limit=400&amp;apikey=</span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;info&quot;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;https://financialmodelingprep.com/api/v3/&quot;</span> <span class="s2">&quot;profile/</span><span class="si">{}</span><span class="s2">?apikey=</span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;is&quot;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;https://financialmodelingprep.com/api/v3/&quot;</span>
+                <span class="s2">&quot;income-statement/</span><span class="si">{}</span><span class="s2">?period=</span><span class="si">{}</span><span class="s2">&amp;limit=400&amp;apikey=</span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;TYield&quot;</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;https://financialmodelingprep.com/api/v4/&quot;</span>
+                <span class="s2">&quot;treasury?from=2010-06-30&amp;to=</span><span class="si">{}</span><span class="s2">&amp;apikey=</span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CPI&quot;</span><span class="p">,</span> <span class="s2">&quot;realGDPPerCapita&quot;</span><span class="p">,</span> <span class="s2">&quot;consumerSentiment&quot;</span><span class="p">]:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;https://financialmodelingprep.com/api/v4/&quot;</span>
+                <span class="s2">&quot;economic?name=</span><span class="si">{}</span><span class="s2">&amp;from=1970-06-30&amp;to=</span><span class="si">{}</span><span class="s2">&amp;apikey=</span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataScraper.make_fmp_api_requests"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper.make_fmp_api_requests">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">make_fmp_api_requests</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Makes an HTTP request to Financial Modeling Prep API and returns the response.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url (str): The URL to send the request to.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Response: The response from the API request.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: Raised if the API request was unsuccessful.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fmp_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">fmp_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;Request unsuccessful&quot;</span>
+        <span class="k">return</span> <span class="n">fmp_response</span></div>
+
+<div class="viewcode-block" id="DataScraper.convert_raw_data_to_json"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper.convert_raw_data_to_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">convert_raw_data_to_json</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts the response from an API request to a JSON object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            response (Response): The response object from the API request.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary representing the JSON object returned by the API request.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: Raised if the API request was successful but the response was empty.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">json_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;API request successful but empty&quot;</span>
+        <span class="k">return</span> <span class="n">json_data</span></div>
+
+<div class="viewcode-block" id="DataScraper.fetch_stock_price_data"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper.fetch_stock_price_data">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_stock_price_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetches stock price data from Yahoo Finance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pandas.DataFrame: A DataFrame containing the stock price data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: Raised if there is insufficient stock price data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">stock_data</span> <span class="o">=</span> <span class="n">pdr</span><span class="o">.</span><span class="n">get_data_yahoo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="s2">&quot;1d&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">stock_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">85</span><span class="p">,</span> <span class="s2">&quot;Insufficient stock price data&quot;</span>
+        <span class="k">return</span> <span class="n">stock_data</span></div>
+
+<div class="viewcode-block" id="DataScraper.fetch_data"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.data_scraper.DataScraper.fetch_data">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetches all financial data from Financial Modeling Prep API and Yahoo Finance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary containing all the financial data retrieved.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AssertionError: Raised if there is insufficient stock price data or if the API request is unsuccessful.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_dictionary</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">request_list</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fmp_company_requests</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;company&quot;</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">fmp_economic_requests</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">==</span> <span class="s2">&quot;^GSPC&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">request_list</span><span class="p">:</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fmp_api_url</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_fmp_api_requests</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_raw_data_to_json</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+                <span class="n">data_dictionary</span><span class="p">[</span><span class="n">string</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="n">stock_price_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_stock_price_data</span><span class="p">()</span>
+        <span class="n">data_dictionary</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stock_price_data</span>
+        <span class="k">return</span> <span class="n">data_dictionary</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">investment-dataset-builder</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">investment_dataset_builder</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, JFD.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

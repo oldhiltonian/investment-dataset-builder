@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>investment_dataset_builder.dataset_builder &#8212; investment-dataset-builder v1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for investment_dataset_builder.dataset_builder</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">.data_parser</span> <span class="kn">import</span> <span class="n">DataParser</span>
+<span class="kn">from</span> <span class="nn">.data_scraper</span> <span class="kn">import</span> <span class="n">DataScraper</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">key_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;desktop&quot;</span> <span class="o">/</span> <span class="s2">&quot;FinancialModellingPrep_API.txt&quot;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">key_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">api_key</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">exchange_name_path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;investment_dataset_builder&quot;</span> <span class="o">/</span> <span class="s2">&quot;exchange_names.json&quot;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">exchange_name_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">exchange_names_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DatasetBuilder"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder">[docs]</a><span class="k">class</span> <span class="nc">DatasetBuilder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class used to build a financial dataset from a given list of stock exchanges.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        exchanges : List</span>
+<span class="sd">            a list of stock exchanges</span>
+<span class="sd">        possible_exchange_names : List</span>
+<span class="sd">            a list of possible stock exchange names</span>
+<span class="sd">        raw_data : List[Dict]</span>
+<span class="sd">            a list of stock ticker data in dictionary format</span>
+<span class="sd">        dataset : pd.DataFrame</span>
+<span class="sd">            a pandas dataframe containing the built financial dataset</span>
+<span class="sd">        _failed_tickers : List[str]</span>
+<span class="sd">            a list of ticker symbols that could not be scraped</span>
+<span class="sd">        _successful_tickers : List[str]</span>
+<span class="sd">            a list of ticker symbols that were successfully scraped</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        build()</span>
+<span class="sd">            Fetches raw data from API and builds the financial dataset</span>
+<span class="sd">        get_fmp_api_url() -&gt; str</span>
+<span class="sd">            Returns the API url for fetching stock ticker data</span>
+<span class="sd">        make_stock_ticker_api_request(url: str) -&gt; requests.Response</span>
+<span class="sd">            Makes an API request for stock ticker data</span>
+<span class="sd">        response_to_json(response_object) -&gt; List[Dict]</span>
+<span class="sd">            Converts API response object to a list of dictionaries</span>
+<span class="sd">        fetch_raw_stock_ticker_data() -&gt; List[Dict]</span>
+<span class="sd">            Fetches raw stock ticker data from API</span>
+<span class="sd">        set_exchanges(new_exchanges: List[str]=&#39;NASDAQ&#39;)</span>
+<span class="sd">            Sets the exchanges attribute to a new list of stock exchanges</span>
+<span class="sd">        check_valid_security(dct: Dict) -&gt; bool</span>
+<span class="sd">            Checks if the security is valid for the given exchanges</span>
+<span class="sd">        build_dataset() -&gt; pd.DataFrame</span>
+<span class="sd">            Builds the financial dataset from the raw stock ticker data</span>
+<span class="sd">        validate_data_is_float64(df) -&gt; pd.DataFrame</span>
+<span class="sd">            Validates that the data in the dataframe is of type float64</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exchanges</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;New York Stock Exchange&quot;</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructs all the necessary attributes for the DatasetBuilder object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exchanges : List, optional</span>
+<span class="sd">                a list of stock exchanges, by default None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exchanges</span> <span class="o">=</span> <span class="n">exchanges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_exchange_names</span> <span class="o">=</span> <span class="n">exchange_names_json</span><span class="p">[</span><span class="s2">&quot;exchange_names&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="DatasetBuilder.build"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches raw data from API and builds the financial dataset.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_raw_stock_ticker_data</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_up_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_dataset</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.get_fmp_api_url"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.get_fmp_api_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_fmp_api_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the API url for fetching stock ticker data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">            url: str</span>
+<span class="sd">                the API url for fetching stock ticker data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://financialmodelingprep.com/api/v3/stock/list?apikey=</span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">url</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.make_stock_ticker_api_request"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.make_stock_ticker_api_request">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">make_stock_ticker_api_request</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Makes an API request for stock ticker data.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            url : str</span>
+<span class="sd">                the API url for fetching stock ticker data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            requests.Response</span>
+<span class="sd">                an API response object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;API request failed: &lt;</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.response_to_json"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.response_to_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">response_to_json</span><span class="p">(</span><span class="n">response_object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts API response object to a list of dictionaries.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            response_object : requests.Response</span>
+<span class="sd">                an API response object</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Dict]</span>
+<span class="sd">                a list of dictionaries containing the stock ticker data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">response_object</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.fetch_raw_stock_ticker_data"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.fetch_raw_stock_ticker_data">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_raw_stock_ticker_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetches raw stock ticker data from API.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Dict]</span>
+<span class="sd">                a list of dictionaries containing the raw stock ticker data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fmp_api_url</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_stock_ticker_api_request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_to_json</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.set_exchanges"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.set_exchanges">[docs]</a>    <span class="k">def</span> <span class="nf">set_exchanges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_exchanges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;New York Stock Exchange&quot;</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the exchanges attribute to a new list of stock exchanges.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            new_exchanges : List[str], optional</span>
+<span class="sd">                a list of new stock exchanges, by default &#39;New York Stock Exchange&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">new_exchanges</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_exchange_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exchanges</span> <span class="o">=</span> <span class="n">new_exchanges</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.check_valid_security"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.check_valid_security">[docs]</a>    <span class="k">def</span> <span class="nf">check_valid_security</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the security is valid for the given exchanges.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            dct : Dict</span>
+<span class="sd">                a dictionary containing stock ticker data</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool</span>
+<span class="sd">                True if the security is valid for the given exchanges, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exchange&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exchanges</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.build_dataset"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.build_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">build_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Builds the financial dataset from the raw stock ticker data.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame</span>
+<span class="sd">                a pandas dataframe containing the built financial dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># setup</span>
+        <span class="n">total_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_failed_tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_successful_tickers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">total_df</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># main loop</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dct</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_data</span><span class="p">):</span>
+            <span class="c1"># We only want to consider stocks</span>
+            <span class="n">is_valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_valid_security</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">ticker</span> <span class="o">=</span> <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;symbol&quot;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;item: </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">scraper</span> <span class="o">=</span> <span class="n">DataScraper</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
+                <span class="n">parser</span> <span class="o">=</span> <span class="n">DataParser</span><span class="p">(</span><span class="n">scraper</span><span class="o">.</span><span class="n">data_dictionary</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_failed_tickers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">df</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">final_data</span>
+            <span class="k">if</span> <span class="n">total_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">total_df</span> <span class="o">=</span> <span class="n">df</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">total_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">total_df</span><span class="p">,</span> <span class="n">df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_successful_tickers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">clear_output</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">total_df</span></div>
+
+<div class="viewcode-block" id="DatasetBuilder.clean_up_dataframe"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.clean_up_dataframe">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">clean_up_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the &quot;start_date&quot; column from the input DataFrame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): Input DataFrame to be cleaned.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Cleaned DataFrame without the &quot;start_date&quot; column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;start_date&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="DatasetBuilder.save_dataset"><a class="viewcode-back" href="../../investment_dataset_builder.html#investment_dataset_builder.dataset_builder.DatasetBuilder.save_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">save_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves the dataset as a Parquet file at the specified path with the index set to True.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): The file path where the dataset will be saved.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+    
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">investment-dataset-builder</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">investment_dataset_builder</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, JFD.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
