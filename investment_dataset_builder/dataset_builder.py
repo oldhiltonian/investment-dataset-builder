@@ -20,8 +20,7 @@ with open(exchange_name_path, "r") as f:
 
 
 class DatasetBuilder:
-    """
-    A class used to build a financial dataset from a given list of stock exchanges.
+    """A class used to build a financial dataset from a given list of stock exchanges.
 
     Attributes:
         exchanges : List
@@ -60,8 +59,7 @@ class DatasetBuilder:
     """
 
     def __init__(self, exchanges: List = ["New York Stock Exchange"]):
-        """
-        Constructs all the necessary attributes for the DatasetBuilder object.
+        """Constructs all the necessary attributes for the DatasetBuilder object.
 
         Args:
             exchanges : List, optional
@@ -73,16 +71,13 @@ class DatasetBuilder:
         self.dataset = None
 
     def build(self):
-        """
-        Fetches raw data from API and builds the financial dataset.
-        """
+        """Fetches raw data from API and builds the financial dataset."""
         self.raw_data = self.fetch_raw_stock_ticker_data()
 
         self.dataset = self.clean_up_dataframe(self.build_dataset())
 
     def get_fmp_api_url(self) -> str:
-        """
-        Returns the API url for fetching stock ticker data.
+        """Returns the API url for fetching stock ticker data.
 
         Returns
             url: str
@@ -93,8 +88,7 @@ class DatasetBuilder:
 
     @staticmethod
     def make_stock_ticker_api_request(url: str) -> requests.Response:
-        """
-        Makes an API request for stock ticker data.
+        """Makes an API request for stock ticker data.
 
         Parameters:
             url : str
@@ -112,8 +106,7 @@ class DatasetBuilder:
 
     @staticmethod
     def response_to_json(response_object) -> List[Dict]:
-        """
-        Converts API response object to a list of dictionaries.
+        """Converts API response object to a list of dictionaries.
 
         Parameters:
             response_object : requests.Response
@@ -126,8 +119,7 @@ class DatasetBuilder:
         return response_object.json()
 
     def fetch_raw_stock_ticker_data(self) -> List[Dict]:
-        """
-        Fetches raw stock ticker data from API.
+        """Fetches raw stock ticker data from API.
 
         Returns:
             List[Dict]
@@ -139,8 +131,7 @@ class DatasetBuilder:
         return data
 
     def set_exchanges(self, new_exchanges: List[str] = ["New York Stock Exchange"]):
-        """
-        Sets the exchanges attribute to a new list of stock exchanges.
+        """Sets the exchanges attribute to a new list of stock exchanges.
 
         Parameters:
             new_exchanges : List[str], optional
@@ -151,8 +142,7 @@ class DatasetBuilder:
         self.exchanges = new_exchanges
 
     def check_valid_security(self, dct: Dict):
-        """
-        Checks if the security is valid for the given exchanges.
+        """Checks if the security is valid for the given exchanges.
 
         Parameters:
             dct : Dict
@@ -168,8 +158,7 @@ class DatasetBuilder:
         return False
 
     def build_dataset(self) -> pd.DataFrame:
-        """
-        Builds the financial dataset from the raw stock ticker data.
+        """Builds the financial dataset from the raw stock ticker data.
 
         Returns:
             pd.DataFrame
@@ -212,8 +201,7 @@ class DatasetBuilder:
 
     @staticmethod
     def clean_up_dataframe(df):
-        """
-        Removes the "start_date" column from the input DataFrame.
+        """Removes the "start_date" column from the input DataFrame.
 
         Args:
             df (pd.DataFrame): Input DataFrame to be cleaned.
@@ -224,8 +212,7 @@ class DatasetBuilder:
         return df.drop(["start_date"], axis=1)
     
     def save_dataset(self, path):
-        """
-        Saves the dataset as a Parquet file at the specified path with the index set to True.
+        """Saves the dataset as a Parquet file at the specified path with the index set to True.
 
         Args:
             path (str): The file path where the dataset will be saved.
