@@ -60,4 +60,4 @@ can be used to scrape company data from Yahoo Finance, and the `DataParser` clas
 License
 -------
 
-This package is licensed under the MIT License. See the
+This package is licensed under the MIT License. See the `LICENSE` file for more information.
